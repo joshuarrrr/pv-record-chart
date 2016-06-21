@@ -1,0 +1,60 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+
+    {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
+    {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
+    {% if COPY.labels.intro %}<div>{{ render(COPY.labels.intro)|smarty }}</div>{% endif %}
+    {% if COPY.labels.instructions %}<p>{{ render(COPY.labels.instructions)|smarty }}</p>{% endif %}
+
+    <div id="line-chart" class="graphic">
+        <img src="fallback.png" alt="[Chart]" class="fallback" />
+    </div>
+
+    {% if COPY.labels.footnote %}
+    <div class="footnotes">
+        <h4>Notes</h4>
+        <p>{{ COPY.labels.footnote|smarty }}</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
+        {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
+    </div>
+    
+    <script type="text/javascript" src="js/lib/underscore.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/backbone/backbone-min.js"></script>
+
+    <script type="text/javascript">
+        var DATA = {{ COPY.data.json() }};
+        // // var DATA = [];
+        // // var Airtable = require('airtable');
+        // // Airtable.configure({
+        // //     endpointUrl: 'https://api.airtable.com',
+        // //     apiKey: 'keyyg2QJWb6wb6tBm'
+        // // });
+        // // var base = Airtable.base('appdED0QPblKKMq68');
+
+        // var airtable_read_endpoint = 'https://api.airtable.com/v0/appdED0QPblKKMq68/Efficiency%20Records?maxRecords=200&view=Main%20View&api_key=keyyg2QJWb6wb6tBm&sortField=_createdTime&sortDirection=desc';
+
+        // console.log(airtable_read_endpoint);
+
+        // var Records = Backbone.Collection.extend({
+        //     url: airtable_read_endpoint
+        // });
+
+        // d3.json(airtable_read_endpoint, function(data) {
+        //     if (error) return console.warn(error);
+        //     DATA = data;
+        // });
+
+        // // console.log($.ajax());
+
+        // var records = new Records;
+
+        // console.log(records.fetch());
+    </script>
+
+{% endblock content %}
