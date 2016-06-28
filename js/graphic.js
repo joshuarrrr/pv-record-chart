@@ -131,7 +131,7 @@ var formatData = function() {
                     // })['fields']['Full Name']
                 }
             }).sort(function(a,b) {
-                return a.date - b.date;
+                return cmp(a.date,b.date) || cmp(a.amt,b.amt)
             })
         });
     });
