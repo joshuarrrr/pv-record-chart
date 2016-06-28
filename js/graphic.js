@@ -9,79 +9,11 @@ var jsonData = {};
  */
 var onWindowLoaded = function() {
     
-    // var jsonToLoad = [
-    //     'records',
-    //     'cell-types',
-    //     'institutions',
-    //     'cell-categories',
-    //     'references'
-    // ]
-    // // var airtable_records = 'records.json';
-    // // var airtable_cell_types = 'cell-types.json';
-    // // var airtable_institutions = 'institutions.json';
-    // var remaining = jsonToLoad.length;
-    
-
-    // jsonToLoad.forEach(function (filename) {
-    //     d3.json(filename + '.json', function(error, data) {
-    //         if (error) return console.warn(error);
-
-    //         jsonData[filename] = data;
-    //         console.log(data);
-    //         console.log(jsonData[filename]);
-
-    //         if (!--remaining) renderPym();
-    //     })
-    // })
-
     renderPym();
 
-    
-    
-
-    // d3.json(airtable_records, function(error, data) {
-    //     if (error) return console.warn(error);
-
-    //     DATA = data;
-    //     console.log(DATA);
-
-    //     // // while (data.offset !== undefined) {
-    //     //     more_airtable_records = airtable_records + "&offset=" + data.offset;
-    //     //     console.log(more_airtable_records);
-    //     //     d3.json(more_airtable_records, function(moreError, moreData) {
-    //     //         if (moreError) return console.warn(moreError);
-
-    //     //         DATA = DATA.concat(moreDATA.records);
-    //     //         console.log(DATA);
-    //     //         console.log(DATA.length);
-    //     //         data.offset = moreData.offset;
-    //     //     });
-    //     // // }
-
-    //     if (!--remaining) renderPym();
-    // });
-
-    // d3.json(airtable_cell_types, function(error, data) {
-    //     if (error) return console.warn(error);
-
-    //     NAMES = data;
-    //     console.log(NAMES);
-
-    //     if (!--remaining) renderPym();
-    // })
-
-    // d3.json(airtable_institutions, function(error, data) {
-    //     if (error) return console.warn(error);
-
-    //     INSTITUTIONS = data;
-    //     console.log(INSTITUTIONS);
-
-    //     if (!--remaining) renderPym();
-    // })
-
     function renderPym () {
-        console.log(DATA);
-        console.log(AIRTABLE_DATA);
+        // console.log(DATA);
+        // console.log(AIRTABLE_DATA);
         jsonData = AIRTABLE_DATA;
         DATA = jsonData['records'];
 
