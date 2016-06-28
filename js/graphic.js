@@ -9,30 +9,32 @@ var jsonData = {};
  */
 var onWindowLoaded = function() {
     
-    var jsonToLoad = [
-        'records',
-        'cell-types',
-        'institutions',
-        'cell-categories',
-        'references'
-    ]
-    // var airtable_records = 'records.json';
-    // var airtable_cell_types = 'cell-types.json';
-    // var airtable_institutions = 'institutions.json';
-    var remaining = jsonToLoad.length;
+    // var jsonToLoad = [
+    //     'records',
+    //     'cell-types',
+    //     'institutions',
+    //     'cell-categories',
+    //     'references'
+    // ]
+    // // var airtable_records = 'records.json';
+    // // var airtable_cell_types = 'cell-types.json';
+    // // var airtable_institutions = 'institutions.json';
+    // var remaining = jsonToLoad.length;
     
 
-    jsonToLoad.forEach(function (filename) {
-        d3.json(filename + '.json', function(error, data) {
-            if (error) return console.warn(error);
+    // jsonToLoad.forEach(function (filename) {
+    //     d3.json(filename + '.json', function(error, data) {
+    //         if (error) return console.warn(error);
 
-            jsonData[filename] = data;
-            console.log(data);
-            console.log(jsonData[filename]);
+    //         jsonData[filename] = data;
+    //         console.log(data);
+    //         console.log(jsonData[filename]);
 
-            if (!--remaining) renderPym();
-        })
-    })
+    //         if (!--remaining) renderPym();
+    //     })
+    // })
+
+    renderPym();
 
     
     
@@ -78,9 +80,9 @@ var onWindowLoaded = function() {
     // })
 
     function renderPym () {
-
-        console.log(jsonData);
-        console.log(jsonData['records']);
+        console.log(DATA);
+        console.log(AIRTABLE_DATA);
+        jsonData = AIRTABLE_DATA;
         DATA = jsonData['records'];
 
         if (Modernizr.svg) {

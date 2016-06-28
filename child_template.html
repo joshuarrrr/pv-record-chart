@@ -29,32 +29,11 @@
 
     <script type="text/javascript">
         var DATA = {{ COPY.data.json() }};
-        // // var DATA = [];
-        // // var Airtable = require('airtable');
-        // // Airtable.configure({
-        // //     endpointUrl: 'https://api.airtable.com',
-        // //     apiKey: 'keyyg2QJWb6wb6tBm'
-        // // });
-        // // var base = Airtable.base('appdED0QPblKKMq68');
+        var AIRTABLE_DATA = {};
 
-        // var airtable_read_endpoint = 'https://api.airtable.com/v0/appdED0QPblKKMq68/Efficiency%20Records?maxRecords=200&view=Main%20View&api_key=keyyg2QJWb6wb6tBm&sortField=_createdTime&sortDirection=desc';
-
-        // console.log(airtable_read_endpoint);
-
-        // var Records = Backbone.Collection.extend({
-        //     url: airtable_read_endpoint
-        // });
-
-        // d3.json(airtable_read_endpoint, function(data) {
-        //     if (error) return console.warn(error);
-        //     DATA = data;
-        // });
-
-        // // console.log($.ajax());
-
-        // var records = new Records;
-
-        // console.log(records.fetch());
+        {% for sheet in AIRTABLE_DATA %}
+        AIRTABLE_DATA['{{ sheet.name }}'] = {{ sheet.data }};
+        {% endfor %}
     </script>
 
 {% endblock content %}
