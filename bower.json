@@ -1,0 +1,24 @@
+{
+  "name": "test-line-graph",
+  "homepage": "https://github.com/joshuarrrr/pv-record-chart",
+  "authors": [
+    "Josh Romero <josh@joshromero.com>"
+  ],
+  "description": "line graph for PV records",
+  "main": "child.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "datatables.net": "^1.10.12",
+    "jquery": "^3.0.0",
+    "backbone": "^1.3.3",
+    "datatables.net-dt": "^1.10.12"
+  }
+}
