@@ -3,6 +3,7 @@ var pymChild = null;
 var isMobile = false;
 var dataSeries = [];
 var jsonData = {};
+var unNestedData = [];
 
 /*
  * Initialize graphic
@@ -86,6 +87,38 @@ var formatData = function() {
     // }
 
     // console.log(dataSeries);
+    unNestedData = DATA;
+
+    unNestedData.forEach(function(d) {
+        var cellData = jsonData['cell-types'].find(function(name) {
+                // console.log(name.id);
+                // console.log(d['fields']['Cell type']);
+                return name.id === d['fields']['Cell type'][0];
+            })['fields'];
+        console.log(cellData);
+        var cellCategory = jsonData['cell-categories'].find(function(name) {
+                console.log(name);
+                return name.id === cellData['Category'][0];
+            })['fields']['Name'];
+        // var name = cellCategory + ' - ' + cellData['Cell type'];
+
+        d['name'] = cellData['Cell type'];
+        // d['name'] = d['fields']['Name'];
+        // d['category'] = d['fields']['Cell category'];
+        d['category'] = cellCategory;
+        d['date'] = d['fields']['Date'];
+        d['amt'] = d['fields']['Efficiency (%)'];
+        d['institutions'] = d['fields']['Group'].map(function(group) {
+            return jsonData['institutions'].find(function(institution) {
+                    return institution.id === group;
+                })['fields']['Full Name']
+        });
+        d['references'] = d['fields']['References'].map(function(reference) {
+            return jsonData['references'].find(function(publication) {
+                return publication.id === reference;
+            })['fields']['Reference']
+        });
+    });
 
     DATA = d3.nest()
         .key(function(d) {
@@ -159,6 +192,13 @@ var render = function(containerWidth) {
         width: containerWidth,
         data: dataSeries
     });
+
+    // Render the datatable!
+    renderTable({
+        container: '#pv-table',
+        width: containerWidth,
+        data: unNestedData
+    })
 
     // Update iframe
     if (pymChild) {
@@ -516,6 +556,31 @@ var renderLineChart = function(config) {
 
                 return label;
             });
+}
+
+var renderTable = function(config) {
+    /*
+     * Setup
+     */
+    var dateColumn = 'date';
+    var valueColumn = 'amt';
+    var dateFormat = d3.time.format('%b %Y');
+
+    $('#pv-table').DataTable({
+        data: config['data'],
+        columns: [
+            { title: "Cell type", data: "name"},
+            { title: "Cell category", data: "category"},
+            { title: "date", data: "date", render: function ( data, type, row ) { return dateFormat(data); }},
+            { title: "Group", data: "institutions"},
+            // { title: "References", data: "references"},
+            { title: "Efficiency (%)", data: "amt"},
+            { title: "Voc (mV)", data: "fields.Voc (mV)"},
+            { title: "Jsc (mAcm-2)", data: "fields.Jsc (mAcm-2)"},
+            { title: "area (cm-2)", data: "fields.area (cm-2)"},
+            { title: "Sun", data: "fields.Sun", defaultContent: 1}
+        ]
+    });
 }
 
 /*

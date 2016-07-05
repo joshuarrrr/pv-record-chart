@@ -23,9 +23,12 @@
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
     </div>
     
+    <table id="pv-table" class="display" width="100%"></table>
+
     <script type="text/javascript" src="js/lib/underscore.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="bower_components/backbone/backbone-min.js"></script>
+    <script type="text/javascript" src="bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
         var DATA = {{ COPY.data.json() }};
