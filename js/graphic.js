@@ -27,8 +27,14 @@ var onWindowLoaded = function() {
         } else {
             pymChild = new pym.Child({});
         }
+
+        // Render the datatable!
+        renderTable({
+            container: '#pv-table',
+            data: unNestedData
+        });
     }
-}
+};
 
 /*
  * Format graphic data for processing by D3.
@@ -192,13 +198,6 @@ var render = function(containerWidth) {
         width: containerWidth,
         data: dataSeries
     });
-
-    // Render the datatable!
-    renderTable({
-        container: '#pv-table',
-        width: containerWidth,
-        data: unNestedData
-    })
 
     // Update iframe
     if (pymChild) {
@@ -568,6 +567,7 @@ var renderTable = function(config) {
 
     $('#pv-table').DataTable({
         data: config['data'],
+        responsive: true,
         columns: [
             { title: "Cell type", data: "name"},
             { title: "Cell category", data: "category"},
@@ -575,12 +575,14 @@ var renderTable = function(config) {
             { title: "Group", data: "institutions"},
             // { title: "References", data: "references"},
             { title: "Efficiency (%)", data: "amt"},
-            { title: "Voc (mV)", data: "fields.Voc (mV)"},
-            { title: "Jsc (mAcm-2)", data: "fields.Jsc (mAcm-2)"},
-            { title: "area (cm-2)", data: "fields.area (cm-2)"},
+            { title: "Voc (mV)", data: "fields.Voc (mV)", defaultContent: ""},
+            { title: "Jsc (mA/cm<sup>2</sup>)", data: "fields.Jsc (mAcm-2)", defaultContent: ""},
+            { title: "area (cm<sup>2</sup>)", data: "fields.area (cm-2)", defaultContent: ""},
             { title: "Sun", data: "fields.Sun", defaultContent: 1}
         ]
     });
+
+    pymChild.sendHeight();
 }
 
 /*
