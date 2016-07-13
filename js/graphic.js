@@ -259,6 +259,8 @@ var renderLineChart = function(config) {
             d3.min(config['data'], function(series) {
                 return d3.min(series['values'], function(d) {
                     // console.log(d);
+                    // console.log(d['date'].getFullYear());
+                    if (d['date'].getFullYear() < 2000) { return; }
                     return d['date'];
                 });
             }),
