@@ -476,7 +476,7 @@ var renderLineChart = function(config) {
             .append('p')
             .html('<b>Date:</b> ' + dateFormat(selectedData['date']) +
                 '    <b>Group:</b> ' + selectedData['institutions'] +
-                '    <b>References:</b>' + selectedData['references']);
+                '    <b>References:</b> ' + selectedData['references']);
 
         infoBox
             .append('p')
@@ -567,7 +567,7 @@ var renderTable = function(config) {
     var valueColumn = 'amt';
     var dateFormat = d3.time.format('%b %Y');
 
-    $('#pv-table').DataTable({
+    var pvTable = $('#pv-table').DataTable({
         data: config['data'],
         responsive: true,
         columns: [
@@ -585,6 +585,11 @@ var renderTable = function(config) {
     });
 
     pymChild.sendHeight();
+
+    pvTable.on( 'draw', function () {
+        console.log( 'Table redrawn' );
+        pymChild.sendHeight();
+    } );
 }
 
 /*

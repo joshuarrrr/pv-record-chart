@@ -5,7 +5,7 @@
     {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %}
     {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %}
     {% if COPY.labels.intro %}<div>{{ render(COPY.labels.intro)|smarty }}</div>{% endif %}
-    {% if COPY.labels.instructions %}<p>{{ render(COPY.labels.instructions)|smarty }}</p>{% endif %}
+    {% if COPY.labels['instructions-line'] %}<p>{{ render(COPY.labels['instructions-line'])|smarty }}</p>{% endif %}
 
     <div id="line-chart" class="graphic">
         <img src="fallback.png" alt="[Chart]" class="fallback" />
@@ -22,6 +22,12 @@
         {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
     </div>
+    <br>
+    <hr>
+    <br>
+    <h3>Full Tabular Data</h3>
+
+    {% if COPY.labels['instructions-table'] %}<p>{{ render(COPY.labels['instructions-table'])|smarty }}</p>{% endif %}
     
     <table id="pv-table" class="display" width="100%"></table>
 
