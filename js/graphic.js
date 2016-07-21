@@ -5,6 +5,8 @@ var dataSeries = [];
 var jsonData = {};
 var unNestedData = [];
 
+var dispatch = d3.dispatch("recordchange");
+
 /*
  * Initialize graphic
  */
@@ -101,9 +103,9 @@ var formatData = function() {
                 // console.log(d['fields']['Cell type']);
                 return name.id === d['fields']['Cell type'][0];
             })['fields'];
-        console.log(cellData);
+        // console.log(cellData);
         var cellCategory = jsonData['cell-categories'].find(function(name) {
-                console.log(name);
+                // console.log(name);
                 return name.id === cellData['Category'][0];
             })['fields']['Name'];
         // var name = cellCategory + ' - ' + cellData['Cell type'];
@@ -135,13 +137,13 @@ var formatData = function() {
     console.log(DATA);
 
     DATA.forEach(function(series) {
-        console.log(series);
+        // console.log(series);
         var cellData = jsonData['cell-types'].find(function(name) {
                 return name.id === series.key;
             })['fields'];
-        console.log(cellData);
+        // console.log(cellData);
         var cellCategory = jsonData['cell-categories'].find(function(name) {
-                console.log(name);
+                // console.log(name);
                 return name.id === cellData['Category'][0];
             })['fields']['Name'];
         var name = cellCategory + ' - ' + cellData['Cell type'];
@@ -151,6 +153,7 @@ var formatData = function() {
             'category': cellCategory,
             'values': series.values.map(function(d) {
                 return {
+                    'id': d.id,
                     'name': name,
                     'category': cellCategory,
                     'date': d['fields']['Date'],
@@ -445,13 +448,14 @@ var renderLineChart = function(config) {
         .enter()
         .append('circle')
             .attr('class', 'point')
+            .attr('id', function(d) { return d.id; })
             .attr('cx', function(d) {
-                console.log(d);
+                // console.log(d);
                 // console.log(xScale(d[dateColumn]));
                 return xScale(d[dateColumn]);
             })
             .attr('cy', function(d) {
-                console.log(d[valueColumn]);
+                // console.log(d[valueColumn]);
                 return yScale(d[valueColumn]);
             })
             .attr('r', 5)
@@ -460,8 +464,15 @@ var renderLineChart = function(config) {
                 return colorScale(d['category']);
             });
 
-    point.on("click", function(datum){
+    point.on('click', function(datum){
         var el = d3.select(this);
+        var selectedData = el.datum();
+
+        dispatch.recordchange.call(this, el);
+    });
+
+    dispatch.on('recordchange.chart', function(el) {
+        console.log(el);
         var selectedData = el.datum();
         var dateFormat = d3.time.format('%b %Y');
 
@@ -604,6 +615,8 @@ var renderTable = function(config) {
     var pvTable = $('#pv-table').DataTable({
         data: config['data'],
         responsive: true,
+        rowId: 'id',
+        select: true,
         columns: [
             { title: "Cell type", data: "name"},
             { title: "Cell category", data: "category"},
@@ -616,6 +629,33 @@ var renderTable = function(config) {
             { title: "area (cm<sup>2</sup>)", data: "fields.area (cm-2)", defaultContent: ""},
             { title: "Sun", data: "fields.Sun", defaultContent: 1}
         ]
+    });
+
+
+    pvTable.on( 'click', 'tr', function () {
+        var id = this.id;
+        console.log(id);
+        dispatch.recordchange.call(d3.select('#' + id).node(), d3.select('#' + id));
+    } );
+    // pvTable.on( 'select', function ( e, dt, type, indexes ) {
+    //     // console.log('selection!' + type);
+    //     if ( type === 'row' ) {
+    //         var data = pvTable.rows( indexes ).data().pluck( 'id' );
+    //         console.log(pvTable.rows( indexes ));
+    //         var id = pvTable[ type ]( indexes ).nodes().id;
+    //         console.log(id);
+    //         dispatch.recordchange.call(this, d3.select('#' + id).node());
+    //         // do something with the ID of the selected items
+    //     }
+    // } );
+
+    dispatch.on('recordchange.table', function(el) {
+        var selectedData = el.datum();
+        console.log(selectedData.id);
+
+        pvTable.row('.selected').deselect();
+
+        pvTable.row('#' + selectedData.id).select();
     });
 
     pymChild.sendHeight();
