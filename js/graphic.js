@@ -330,6 +330,7 @@ var renderLineChart = function(config) {
         .attr('class', 'graphic-wrapper');
 
     var chartElement = chartWrapper.append('svg')
+        .attr('id', 'line-chart-svg')
         .attr('width', chartWidth + margins['left'] + margins['right'])
         .attr('height', chartHeight + margins['top'] + margins['bottom'])
         .append('g')
@@ -459,10 +460,16 @@ var renderLineChart = function(config) {
                 return colorScale(d['category']);
             });
 
-    point.on("click", function(){
+    point.on("click", function(datum){
         var el = d3.select(this);
         var selectedData = el.datum();
         var dateFormat = d3.time.format('%b %Y');
+
+        var svgPos = chartElement.node().parentElement.getBoundingClientRect();
+        var matrix = this.getScreenCTM()
+            .translate(+ this.getAttribute("cx") - svgPos.left, + this.getAttribute("cy") - svgPos.top);
+        var ttOffset = 30
+        var ttWidth = (chartWidth / 2) - ttOffset;
 
         console.log(selectedData);
 
@@ -521,6 +528,33 @@ var renderLineChart = function(config) {
 
                     return label;
                 });
+
+        d3.select('.div-tooltip').remove();
+
+        var tooltip = chartWrapper.append('div')
+            .classed('div-tooltip', true)
+            .html(infoBox.html())
+            .style('width', ttWidth + 'px');
+
+        // console.log(d3.select(chartElement.node().parentNode));
+
+        tooltip
+            .style('left', function() {
+                if ( xScale(selectedData[dateColumn]) < (chartWidth / 2) ) {
+                    return (window.pageXOffset + matrix.e + ttOffset) + 'px';
+                }
+                else {
+                    return (window.pageXOffset + matrix.e - this.clientWidth - ttOffset ) + 'px';
+                }
+            })
+            .style('top', function() {
+                if ( yScale(selectedData[valueColumn]) < (chartHeight / 2) ) {
+                    return (window.pageYOffset + matrix.f + ttOffset) + 'px';
+                }
+                else {
+                    return (window.pageYOffset + matrix.f - this.clientHeight - ttOffset ) + 'px';
+                }
+            });
 
         pymChild.sendHeight();
     });
