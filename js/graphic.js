@@ -13,7 +13,7 @@ var dataSeries = [];
 var jsonData = {};
 var unNestedData = [];
 
-var dispatch = d3.dispatch("recordchange");
+var dispatch = d3.dispatch('recordchange', 'recordhover', 'recordclear');
 
 /*
  * Initialize graphic
@@ -451,6 +451,9 @@ var renderLineChart = function(config) {
                     return 'points ' + classify(d['name']);
                 });
 
+    // var filter = chartElement.append('defs')
+    //     .html('<filter x="-2%" y="-10%" width="104%" height="120%" id="solid"><feFlood flood-color="white"/><feComposite in="SourceGraphic"/></filter>')
+
     var point = points.selectAll('circle')
         .data(function(d) { return d['values']; })
         .enter()
@@ -472,22 +475,97 @@ var renderLineChart = function(config) {
                 return colorScale(d['category']);
             });
 
-    point.on('click', function(datum){
-        var el = d3.select(this);
-        var selectedData = el.datum();
-
-        dispatch.recordchange.call(this, el);
+    point.on('click', function(){
+        d3.event.stopPropagation();
+        var id = d3.select(this).datum().id;
+        
+        dispatch.recordchange(id);
     });
 
-    dispatch.on('recordchange.chart', function(el) {
-        console.log(el);
+    point.on('mouseover', function(){
+        var id = d3.select(this).datum().id;
+        // console.log(id);
+
+        dispatch.recordhover(id);
+    });
+
+    d3.select(chartElement.node().parentElement).on('click', function(){
+        console.log('chart clicked');
+        dispatch.recordclear();
+    });
+
+    dispatch.on('recordclear.chart', function() {
+        d3.selectAll('.selected')
+            .classed('selected', false);
+
+        d3.selectAll('.line')
+            .attr('opacity', 1);  
+
+        d3.selectAll('.points .point')
+            .attr('opacity', 1);  
+
+        d3.select('.div-tooltip').remove();
+
+    });
+
+    dispatch.on('recordhover.chart', function(id) {
+        var el = d3.select('#' + id);
+        var selectedData = el.datum();
+        var offset = 15;
+        var dateFormat = d3.time.format('%b %Y');
+
+        d3.selectAll('.tooltip')
+            .remove();
+
+        d3.selectAll('.point')
+            .attr('r', 5);
+
+        el
+            .attr('r', 7.5);
+
+        var ttText = chartElement.append('g')
+            .attr('class', 'tooltip')
+            .append('text')
+                // .attr('filter', 'url(#solid)')
+                .attr('text-anchor', function() {
+                    return xScale(selectedData[dateColumn]) > (chartWidth / 2) ? 'end' : 'start';
+                })
+                .attr('dx', function() {
+                    return xScale(selectedData[dateColumn]) > (chartWidth / 2) ? (- offset) : offset;
+                })
+                .attr('x', xScale(selectedData[dateColumn]))
+                .attr('y', yScale(selectedData[valueColumn]) - offset)
+                .text(function() {
+                    var label = selectedData[valueColumn].toFixed(1)  + '%';
+                    if (!isMobile) {
+                        label = dateFormat(selectedData['date']) + ': ' + label;
+                    }
+
+                    return label;
+                });
+
+        var bbox = ttText.node().getBBox();
+        var padding = 5;
+        var rect = d3.select('.tooltip').insert('rect', 'text')
+            .attr('class', 'tt-background')
+            .attr('x', bbox.x - padding)
+            .attr('y', bbox.y - padding)
+            .attr('width', bbox.width + (padding*2))
+            .attr('height', bbox.height + (padding*2))
+            .style('fill', 'white')
+            .style('stroke', '#ddd');
+    });
+
+    dispatch.on('recordchange.chart', function(id) {
+        var el = d3.select('#' + id);
+        var node = el.node();
         var selectedData = el.datum();
         var dateFormat = d3.time.format('%b %Y');
 
         var svgPos = chartElement.node().parentElement.getBoundingClientRect();
-        var matrix = this.getScreenCTM()
-            .translate(+ this.getAttribute("cx") - svgPos.left, + this.getAttribute("cy") - svgPos.top);
-        var ttOffset = 30
+        var matrix = node.getScreenCTM()
+            .translate(+ node.getAttribute('cx') - svgPos.left, + node.getAttribute('cy') - svgPos.top);
+        var ttOffset = 9.5;
         var ttWidth = (chartWidth / 2) - ttOffset;
 
         console.log(selectedData);
@@ -508,45 +586,22 @@ var renderLineChart = function(config) {
             .append('p')
             .html('<b>Efficiency:</b> ' + selectedData['amt'].toFixed(1) + '%');
 
-        d3.selectAll('.tooltip')
-            .remove();
-
         d3.selectAll('.selected')
             .classed('selected', false);
 
         el.classed('selected', true);
 
         d3.selectAll('.line:not(.' + classify(selectedData['name']) + ')')
-            .attr('opacity', .3);
+            .attr('opacity', 0.3);
 
         d3.selectAll('.' + classify(selectedData['name']))
             .attr('opacity', 1);  
 
         d3.selectAll('.points:not(.' + classify(selectedData['name']) + ') .point')
-            .attr('opacity', .3);
+            .attr('opacity', 0.3);
 
         d3.selectAll('.points.' + classify(selectedData['name']) + ' .point')
             .attr('opacity', 1);  
-
-        chartElement.append('g')
-            .attr('class', 'tooltip')
-            .append('text')
-                .attr('text-anchor', function() {
-                    return xScale(selectedData[dateColumn]) > (chartWidth / 2) ? 'end' : 'start';
-                })
-                .attr('dx', function() {
-                    return xScale(selectedData[dateColumn]) > (chartWidth / 2) ? -5 : 5;
-                })
-                .attr('x', xScale(selectedData[dateColumn]))
-                .attr('y', yScale(selectedData[valueColumn]) - 3)
-                .text(function() {
-                    var label = selectedData[valueColumn].toFixed(1)  + '%';
-                    if (!isMobile) {
-                        label = selectedData['institutions'] + ': ' + label;
-                    }
-
-                    return label;
-                });
 
         d3.select('.div-tooltip').remove();
 
@@ -643,7 +698,13 @@ var renderTable = function(config) {
     pvTable.on( 'click', 'tr', function () {
         var id = this.id;
         console.log(id);
-        dispatch.recordchange.call(d3.select('#' + id).node(), d3.select('#' + id));
+        dispatch.recordchange(id);
+    } );
+
+    pvTable.on( 'mouseover', 'tr', function () {
+        var id = this.id;
+        console.log(id);
+        dispatch.recordhover(id);
     } );
     // pvTable.on( 'select', function ( e, dt, type, indexes ) {
     //     // console.log('selection!' + type);
@@ -657,13 +718,14 @@ var renderTable = function(config) {
     //     }
     // } );
 
-    dispatch.on('recordchange.table', function(el) {
-        var selectedData = el.datum();
-        console.log(selectedData.id);
+    dispatch.on('recordchange.table', function(id) {
+        // var el = d3.select('#' + id);
+        // var selectedData = el.datum();
+        // console.log(selectedData.id);
 
         pvTable.row('.selected').deselect();
 
-        pvTable.row('#' + selectedData.id).select();
+        pvTable.row('#' + id).select();
     });
 
     pymChild.sendHeight();
