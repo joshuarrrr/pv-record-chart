@@ -699,13 +699,17 @@ var renderTable = function(config) {
     pvTable.on( 'click', 'tr', function () {
         var id = this.id;
         console.log(id);
-        dispatch.recordchange(id);
+        if ( id ) {
+            dispatch.recordchange(id);
+        }
     } );
 
     pvTable.on( 'mouseover', 'tr', function () {
         var id = this.id;
         console.log(id);
-        dispatch.recordhover(id);
+        if ( id ) {
+           dispatch.recordhover(id); 
+        }
     } );
     // pvTable.on( 'select', function ( e, dt, type, indexes ) {
     //     // console.log('selection!' + type);
