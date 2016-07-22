@@ -49,9 +49,9 @@ var formatData = function() {
     //         return _.has(d['fields'], 'Date');
     //     });
 
-    DATA = DATA.filter(function(d) {
-            return _.has(d['fields'], 'References');
-        });
+    // DATA = DATA.filter(function(d) {
+    //         return _.has(d['fields'], 'References');
+    //     });
 
     DATA.forEach(function(d) {
         // console.log(d['fields']);
@@ -61,6 +61,10 @@ var formatData = function() {
         }
         else {
             d['fields']['Date'] = d3.time.format('%m/%y').parse('6/16');
+        }
+
+        if ( !d['fields']['References'] ) {
+            d['fields']['References'] = [];
         }
         
         for (var key in d['fields']) {
@@ -124,6 +128,7 @@ var formatData = function() {
                     return institution.id === group;
                 })['fields']['Full Name'];
         });
+
         d['references'] = d['fields']['References'].map(function(reference) {
             return jsonData['references'].find(function(publication) {
                 return publication.id === reference;
