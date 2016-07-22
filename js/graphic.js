@@ -38,11 +38,6 @@ var onWindowLoaded = function() {
             pymChild = new pym.Child({});
         }
 
-        // Render the datatable!
-        renderTable({
-            container: '#pv-table',
-            data: unNestedData
-        });
     }
 };
 
@@ -208,6 +203,12 @@ var render = function(containerWidth) {
         container: '#line-chart',
         width: containerWidth,
         data: dataSeries
+    });
+
+    // Render the datatable!
+    renderTable({
+        container: '#pv-table',
+        data: unNestedData
     });
 
     // Update iframe
@@ -728,7 +729,7 @@ var renderTable = function(config) {
         pvTable.row('#' + id).select();
     });
 
-    pymChild.sendHeight();
+    // pymChild.sendHeight();
 
     pvTable.on( 'draw', function () {
         console.log( 'Table redrawn' );
