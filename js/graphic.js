@@ -1,4 +1,12 @@
 // Global vars
+/* globals AIRTABLE_DATA:true */
+/* globals DATA:true */
+/* globals DEFAULT_WIDTH:true */
+/* globals MOBILE_THRESHOLD:true */
+/* globals COLORS:true */
+/* globals fmtComma, fmtYearAbbrev, fmtYearFull */
+/* globals classify, formatStyle, makeTranslate, getParameterByName, urlToLocation, cmp */
+
 var pymChild = null;
 var isMobile = false;
 var dataSeries = [];
@@ -119,12 +127,12 @@ var formatData = function() {
         d['institutions'] = d['fields']['Group'].map(function(group) {
             return jsonData['institutions'].find(function(institution) {
                     return institution.id === group;
-                })['fields']['Full Name']
+                })['fields']['Full Name'];
         });
         d['references'] = d['fields']['References'].map(function(reference) {
             return jsonData['references'].find(function(publication) {
                 return publication.id === reference;
-            })['fields']['Reference']
+            })['fields']['Reference'];
         });
     });
 
@@ -161,25 +169,25 @@ var formatData = function() {
                     'institutions': d['fields']['Group'].map(function(group) {
                         return jsonData['institutions'].find(function(institution) {
                                 return institution.id === group;
-                            })['fields']['Full Name']
+                            })['fields']['Full Name'];
                     }),
                     'references': d['fields']['References'].map(function(reference) {
                         return jsonData['references'].find(function(publication) {
                             return publication.id === reference;
-                        })['fields']['Reference']
+                        })['fields']['Reference'];
                     })
                     // 'institution': jsonData['institutions'].find(function(institution) {
                     //     return institution.id === d['fields']['Group'][0];
                     // })['fields']['Full Name']
-                }
+                };
             }).sort(function(a,b) {
-                return cmp(a.date,b.date) || cmp(a.amt,b.amt)
+                return cmp(a.date,b.date) || cmp(a.amt,b.amt);
             })
         });
     });
 
     console.log(dataSeries);
-}
+};
 
 /*
  * Render the graphic(s). Called by pym with the container width.
@@ -206,7 +214,7 @@ var render = function(containerWidth) {
     if (pymChild) {
         pymChild.sendHeight();
     }
-}
+};
 
 /*
  * Render a line chart.
@@ -274,12 +282,12 @@ var renderLineChart = function(config) {
                 });
             })
         ])
-        .range([ 0, chartWidth ])
+        .range([ 0, chartWidth ]);
 
     var min = d3.min(config['data'], function(d) {
         return d3.min(d['values'], function(v) {
             return Math.floor(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
-        })
+        });
     });
 
     if (min > 0) {
@@ -289,7 +297,7 @@ var renderLineChart = function(config) {
     var max = d3.max(config['data'], function(d) {
         return d3.max(d['values'], function(v) {
             return Math.ceil(v[valueColumn] / roundTicksFactor) * roundTicksFactor;
-        })
+        });
     });
 
     var yScale = d3.scale.linear()
@@ -376,11 +384,11 @@ var renderLineChart = function(config) {
      */
     var xAxisGrid = function() {
         return xAxis;
-    }
+    };
 
     var yAxisGrid = function() {
         return yAxis;
-    }
+    };
 
     chartElement.append('g')
         .attr('class', 'x grid')
@@ -602,7 +610,7 @@ var renderLineChart = function(config) {
 
                 return label;
             });
-}
+};
 
 var renderTable = function(config) {
     /*
@@ -618,16 +626,16 @@ var renderTable = function(config) {
         rowId: 'id',
         select: true,
         columns: [
-            { title: "Cell type", data: "name"},
-            { title: "Cell category", data: "category"},
-            { title: "date", data: "date", render: function ( data, type, row ) { return dateFormat(data); }},
-            { title: "Group", data: "institutions"},
-            // { title: "References", data: "references"},
-            { title: "Efficiency (%)", data: "amt"},
-            { title: "Voc (mV)", data: "fields.Voc (mV)", defaultContent: ""},
-            { title: "Jsc (mA/cm<sup>2</sup>)", data: "fields.Jsc (mAcm-2)", defaultContent: ""},
-            { title: "area (cm<sup>2</sup>)", data: "fields.area (cm-2)", defaultContent: ""},
-            { title: "Sun", data: "fields.Sun", defaultContent: 1}
+            { title: 'Cell type', data: 'name'},
+            { title: 'Cell category', data: 'category'},
+            { title: 'date', data: 'date', render: function ( data, type, row ) { return dateFormat(data); }},
+            { title: 'Group', data: 'institutions'},
+            // { title: 'References', data: 'references'},
+            { title: 'Efficiency (%)', data: 'amt'},
+            { title: 'Voc (mV)', data: 'fields.Voc (mV)', defaultContent: ''},
+            { title: 'Jsc (mA/cm<sup>2</sup>)', data: 'fields.Jsc (mAcm-2)', defaultContent: ''},
+            { title: 'area (cm<sup>2</sup>)', data: 'fields.area (cm-2)', defaultContent: ''},
+            { title: 'Sun', data: 'fields.Sun', defaultContent: 1}
         ]
     });
 
@@ -664,7 +672,7 @@ var renderTable = function(config) {
         console.log( 'Table redrawn' );
         pymChild.sendHeight();
     } );
-}
+};
 
 /*
  * Initially load the graphic
