@@ -572,7 +572,9 @@ var renderLineChart = function(config) {
             .attr('width', bbox.width + (padding*2))
             .attr('height', bbox.height + (padding*2))
             .style('fill', 'white')
-            .style('stroke', '#ddd');
+            .style('stroke', '#ddd')
+            .style('width', (bbox.width + (padding*2)) + 'px')
+            .style('height', (bbox.height + (padding*2)) + 'px');
     });
 
     dispatch.on('recordchange.chart', function(id) {
