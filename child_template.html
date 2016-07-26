@@ -62,20 +62,22 @@
         </div>
         <div class="more-details">
             <table>
-                <tr>
-                    <th>Voc (mV)</th>
-                    <th>Jsc (mA/cm<sup>2</sup>)</th>
-                    <th>F (%)</th>
-                    <th>area (cm<sup>2</sup>)</th>
-                    <th>suns</th>
-                </tr>
-                <tr>
-                    <td><%= record.voc %></td>
-                    <td><%= record.jsc %></td>
-                    <td><%= record.ff %></td>
-                    <td><%= record.area %></td>
-                    <td><%= record.suns %></td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th>Voc (mV)</th>
+                        <th>Jsc (mA/cm<sup>2</sup>)</th>
+                        <th>F (%)</th>
+                        <th>area (cm<sup>2</sup>)</th>
+                        <th>suns</th>
+                    </tr>
+                    <tr>
+                        <td><%= record.voc %></td>
+                        <td><%= record.jsc %></td>
+                        <td><%= record.ff %></td>
+                        <td><%= record.area %></td>
+                        <td><%= record.suns %></td>
+                    </tr>
+                </tbody>
             </table>
             <em>References:</em>
             <ul>
