@@ -15,6 +15,8 @@ var unNestedData = [];
 
 var dispatch = d3.dispatch('recordchange', 'recordhover', 'recordclear');
 
+var dateFormat = d3.time.format('%b %Y');
+
 /*
  * Initialize graphic
  */
@@ -67,11 +69,12 @@ var formatData = function() {
             d['fields']['References'] = [];
         }
         
-        for (var key in d['fields']) {
-            if (key != 'Date' && d[key] != null && d[key].length > 0) {
-                d[key] = +d[key];
-            }
-        }
+        // for (var key in d['fields']) {
+        //     console.log(key);
+        //     if (key != 'Date' && d[key] != null && d[key].length > 0) {
+        //         d[key] = +d[key];
+        //     }
+        // }
     });
 
     /*
@@ -166,6 +169,11 @@ var formatData = function() {
                     'category': cellCategory,
                     'date': d['fields']['Date'],
                     'amt': d['fields']['Efficiency (%)'],
+                    'voc': d['fields']['Voc (mV)'],
+                    'jsc': d['fields']['Jsc (mAcm-2)'],
+                    'ff': d['fields']['F (%)'],
+                    'area': d['fields']['area (cm-2)'],
+                    'suns': d['fields']['Sun'] || 1,
                     'institutions': d['fields']['Group'].map(function(group) {
                         return jsonData['institutions'].find(function(institution) {
                                 return institution.id === group;
@@ -481,6 +489,10 @@ var renderLineChart = function(config) {
                 return colorScale(d['category']);
             });
 
+    var ttTemplate = _.template($('#tooltip-template').html(), {variable: 'record'});
+    var tooltip = chartWrapper.append('div')
+            .classed('tooltip-details', true);
+
     point.on('click', function(){
         d3.event.stopPropagation();
         var id = d3.select(this).datum().id;
@@ -510,7 +522,8 @@ var renderLineChart = function(config) {
         d3.selectAll('.points .point')
             .attr('opacity', 1);  
 
-        d3.select('.div-tooltip').remove();
+        // d3.select('.div-tooltip').remove();
+        $(tooltip.node()).hide();
 
     });
 
@@ -518,7 +531,7 @@ var renderLineChart = function(config) {
         var el = d3.select('#' + id);
         var selectedData = el.datum();
         var offset = 15;
-        var dateFormat = d3.time.format('%b %Y');
+        // var dateFormat = d3.time.format('%b %Y');
 
         d3.selectAll('.tooltip')
             .remove();
@@ -566,7 +579,7 @@ var renderLineChart = function(config) {
         var el = d3.select('#' + id);
         var node = el.node();
         var selectedData = el.datum();
-        var dateFormat = d3.time.format('%b %Y');
+        // var dateFormat = d3.time.format('%b %Y');
 
         var svgPos = chartElement.node().parentElement.getBoundingClientRect();
         var matrix = node.getScreenCTM()
@@ -609,17 +622,24 @@ var renderLineChart = function(config) {
         d3.selectAll('.points.' + classify(selectedData['name']) + ' .point')
             .attr('opacity', 1);  
 
-        d3.select('.div-tooltip').remove();
+        // d3.select('.div-tooltip').remove();
 
-        var tooltip = chartWrapper.append('div')
-            .classed('div-tooltip', true)
-            .html(infoBox.html())
-            .style('width', ttWidth + 'px');
+        // var tooltip = chartWrapper.append('div')
+        //     .classed('div-tooltip', true)
+        //     .html(infoBox.html())
+        //     .style('width', ttWidth + 'px');
 
         // console.log(d3.select(chartElement.node().parentNode));
 
+        $(tooltip.node()).show();
+
         tooltip
+            .html(ttTemplate(selectedData))
+            .style('max-width', ttWidth + 'px')
             .style('left', function() {
+                // console.log(xScale(selectedData[dateColumn]));
+                // console.log(chartWidth / 2);
+                // console.log(xScale(selectedData[dateColumn]) < (chartWidth / 2));
                 if ( xScale(selectedData[dateColumn]) < (chartWidth / 2) ) {
                     return (window.pageXOffset + matrix.e + ttOffset) + 'px';
                 }
@@ -635,6 +655,29 @@ var renderLineChart = function(config) {
                     return (window.pageYOffset + matrix.f - this.clientHeight - ttOffset ) + 'px';
                 }
             });
+
+        tooltip
+            .select('#select-series').selectAll('option')
+            .data(config['data'])
+        .enter()
+            .append('option')
+            .attr('value', function (d) { return d.name; })
+            .text(function (d) { return d.name; });
+
+        $('.tooltip-details #close').click(function(e) {
+            e.preventDefault();
+
+            dispatch.recordclear();
+        });
+
+        $('#ttMore-details').click(function(e) {
+            e.preventDefault();
+
+            $(this).text($('.tooltip-details .more-details').is(':visible') ? 'Show details' : 'Hide details');
+
+            $('.tooltip-details .more-details').toggle();
+        });
+
 
         pymChild.sendHeight();
     });
@@ -679,7 +722,7 @@ var renderTable = function(config) {
      */
     var dateColumn = 'date';
     var valueColumn = 'amt';
-    var dateFormat = d3.time.format('%b %Y');
+    // var dateFormat = d3.time.format('%b %Y');
 
     var pvTable = $('#pv-table').DataTable({
         data: config['data'],
@@ -696,6 +739,7 @@ var renderTable = function(config) {
             { title: 'Voc (mV)', data: 'fields.Voc (mV)', defaultContent: ''},
             { title: 'Jsc (mA/cm<sup>2</sup>)', data: 'fields.Jsc (mAcm-2)', defaultContent: ''},
             { title: 'area (cm<sup>2</sup>)', data: 'fields.area (cm-2)', defaultContent: ''},
+            { title: 'F (%)', data: 'fields.F (%)', defaultContent: ''},
             { title: 'Sun', data: 'fields.Sun', defaultContent: 1}
         ]
     });

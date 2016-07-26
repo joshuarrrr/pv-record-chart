@@ -49,4 +49,48 @@
         {% endfor %}
     </script>
 
+    <script id="tooltip-template" type="text/html">
+        <div class="meta"><a href="#" id="close">Close</a></div>
+        <div><%= dateFormat(record.date) %></div>
+        <div class="details">
+            <div class="big-number">
+                <span class="big"><%= record.amt.toFixed(1) + '%' %></span>
+            </div>
+            <div class="group"><%= record.institutions.join(', ') %></div>
+            <div><%= record.name %></div>
+            <div><a href="#" id="ttMore-details">See details</a></div>
+        </div>
+        <div class="more-details">
+            <table>
+                <tr>
+                    <th>Voc (mV)</th>
+                    <th>Jsc (mA/cm<sup>2</sup>)</th>
+                    <th>F (%)</th>
+                    <th>area (cm<sup>2</sup>)</th>
+                    <th>suns</th>
+                </tr>
+                <tr>
+                    <td><%= record.voc %></td>
+                    <td><%= record.jsc %></td>
+                    <td><%= record.ff %></td>
+                    <td><%= record.area %></td>
+                    <td><%= record.suns %></td>
+                </tr>
+            </table>
+            <em>References:</em>
+            <ul>
+            <% _.each(record.references, function(reference){ %>
+                <li><%= reference %></li>
+            <% }); %>
+            </ul>
+        </div>
+        <nav class="tooltip-nav">
+            <div>Navigate Records</div>
+            <!-- <h4>Cell Type:</h4> -->
+            <select name="series" class="select-series" id="select-series"></select>
+            <button class="prev">Previous</button>
+            <button class="next">Next</button>
+        </nav>
+    </script>
+
 {% endblock content %}
