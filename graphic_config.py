@@ -30,7 +30,7 @@ AIRTABLE_ENDPOINTS = [
 	}
 ]
 
-USE_ASSETS = False
+USE_ASSETS = True
 
 # Use these variables to override the default cache timeouts for this graphic
 # DEFAULT_MAX_AGE = 20

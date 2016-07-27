@@ -245,7 +245,8 @@ var renderLineChart = function(config) {
 
     var margins = {
         top: 5,
-        right: 75,
+        // right: 75,
+        right: 30,
         bottom: 20,
         left: 30
     };
@@ -327,6 +328,7 @@ var renderLineChart = function(config) {
      */
     var legend = containerElement.append('ul')
         .attr('class', 'key')
+        .style('margin-left', margins.left + 'px')
         .selectAll('g')
         // .data(config['data'])
         .data(colorScale.domain().sort(function(a, b) {
