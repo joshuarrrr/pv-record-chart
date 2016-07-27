@@ -1,6 +1,7 @@
 *.py[co]
 *.json
 *.xlsx
+/assets/*
 
 bower_components/*
 !bower.json
