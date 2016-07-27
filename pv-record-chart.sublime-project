@@ -2,22 +2,7 @@
 	"folders":
 	[
 		{
-			"path": ""
-		},
-		{
-			"path": "css"
-		},
-		{
-			"path": "assets"
-		},
-		{
-			"path": "fonts"
-		},
-		{
-			"path": "bower_components"
-		},
-		{
-			"path": "js"
+			"path": "."
 		}
 	]
 }
