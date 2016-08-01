@@ -591,6 +591,8 @@ var renderLineChart = function(config) {
         var ttOffset = 9.5;
         var ttWidth = (chartWidth / 2) - ttOffset;
 
+        node.parentNode.appendChild(node);
+
         console.log(selectedData);
 
         infoBox.html('');
