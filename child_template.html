@@ -4,9 +4,9 @@
 
     <!-- {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %} -->
     <!-- {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %} -->
-    {% if COPY.labels.intro %}
+<!--     {% if COPY.labels.intro %}
     <div class = "introduction">{{ render(COPY.labels.intro)|smarty }}</div>
-    {% endif %}
+    {% endif %} -->
     <div class="logos">
         <h3>Data verified by</h3>
         <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel-logo.sm.png" /></a>
@@ -74,11 +74,11 @@
             <table>
                 <tbody>
                     <tr>
-                        <th>Voc (mV)</th>
-                        <th>Jsc (mA/cm<sup>2</sup>)</th>
-                        <th>F (%)</th>
-                        <th>area (cm<sup>2</sup>)</th>
-                        <th>suns</th>
+                        <th>V<sub>OC</sub> (mV)</th>
+                        <th>J<sub>SC</sub> (mA/cm<sup>2</sup>)</th>
+                        <th>FF (%)</th>
+                        <th>Area (cm<sup>2</sup>)</th>
+                        <th>Suns</th>
                     </tr>
                     <tr>
                         <td><%= record.voc %></td>

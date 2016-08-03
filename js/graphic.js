@@ -12,6 +12,7 @@ var isMobile = false;
 var dataSeries = [];
 var jsonData = {};
 var unNestedData = [];
+var tableRendered = false;
 
 var dispatch = d3.dispatch('recordchange', 'recordhover', 'recordclear');
 
@@ -730,70 +731,146 @@ var renderTable = function(config) {
     var valueColumn = 'amt';
     // var dateFormat = d3.time.format('%b %Y');
 
-    var pvTable = $('#pv-table').DataTable({
-        data: config['data'],
-        responsive: true,
-        rowId: 'id',
-        select: true,
-        columns: [
-            { title: 'Cell type', data: 'name'},
-            { title: 'Cell category', data: 'category'},
-            { title: 'date', data: 'date', render: function ( data, type, row ) { return dateFormat(data); }},
-            { title: 'Group', data: 'institutions'},
-            // { title: 'References', data: 'references'},
-            { title: 'Efficiency (%)', data: 'amt'},
-            { title: 'Voc (mV)', data: 'fields.Voc (mV)', defaultContent: ''},
-            { title: 'Jsc (mA/cm<sup>2</sup>)', data: 'fields.Jsc (mAcm-2)', defaultContent: ''},
-            { title: 'area (cm<sup>2</sup>)', data: 'fields.area (cm-2)', defaultContent: ''},
-            { title: 'F (%)', data: 'fields.F (%)', defaultContent: ''},
-            { title: 'Sun', data: 'fields.Sun', defaultContent: 1}
-        ]
-    });
+    if ( !tableRendered ) {
+        var pvTable = $('#pv-table').DataTable({
+            data: config['data'],
+            buttons: [
+                'csv',
+                {
+                    extend:'pdf',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                }
+            ],
+            deferRender: true,
+            dom: 'Bfrtip',
+            order: [[0, 'desc']],
+            responsive: true,
+            rowId: 'id',
+            select: true,
+            columns: [
+                {
+                    title: 'Date',
+                    data: 'date',
+                    render: function ( data, type, row ) { return dateFormat(data); },
+                    responsivePriority: 1
+                },
+                {
+                    title: 'Cell type',
+                    data: 'name',
+                    responsivePriority: 3
+                },
+                {
+                    title: 'Cell category',
+                    data: 'category',
+                    responsivePriority: 5
+                },
+                {
+                    title: 'Group(s)',
+                    data: 'institutions',
+                    render: function ( data, type, row ) { return data.join('; '); },
+                    responsivePriority: 4
+                },
+                {
+                    title: 'Efficiency (%)',
+                    data: 'amt',
+                    responsivePriority: 2
+                },
+                {
+                    title: 'V<sub>OC</sub> (mV)',
+                    data: 'fields.Voc (mV)', defaultContent: '',
+                    responsivePriority: 7
+                },
+                {
+                    title: 'J<sub>SC</sub> (mA/cm<sup>2</sup>)',
+                    data: 'fields.Jsc (mAcm-2)', defaultContent: '',
+                    responsivePriority: 8
+                },
+                {
+                    title: 'Area (cm<sup>2</sup>)',
+                    data: 'fields.area (cm-2)', defaultContent: '',
+                    responsivePriority: 9
+                },
+                {
+                    title: 'FF (%)',
+                    data: 'fields.F (%)', defaultContent: '',
+                    responsivePriority: 10
+                },
+                {
+                    title: 'Suns',
+                    data: 'fields.Sun', defaultContent: 1,
+                    responsivePriority: 6
+                },
+
+                {
+                    title: 'References',
+                    data: 'references',
+                    defaultContent: 'not available',
+                    render: function ( data, type, row ) {
+                        if ( data.length === 0 ) {
+                            return 'not available';
+                        }
+                        var inner = '';
+                        data.forEach(function(d) {
+                            inner += '<li>' + d + '</li>';
+                        });
+                        return '<ul>' + inner + '</ul>';
+                    },
+                    responsivePriority: 11 
+                },
+            ]
+        });
+
+        $('.dt-buttons').prepend('<span>Export to: </span>');
 
 
-    pvTable.on( 'click', 'tr', function () {
-        var id = this.id;
-        console.log(id);
-        if ( id ) {
-            dispatch.recordchange(id);
-        }
-    } );
+        pvTable.on( 'click', 'tr', function () {
+            var id = this.id;
+            // console.log(id);
+            if ( id ) {
+                dispatch.recordchange(id);
+            }
+        } );
 
-    pvTable.on( 'mouseover', 'tr', function () {
-        var id = this.id;
-        console.log(id);
-        if ( id ) {
-           dispatch.recordhover(id); 
-        }
-    } );
-    // pvTable.on( 'select', function ( e, dt, type, indexes ) {
-    //     // console.log('selection!' + type);
-    //     if ( type === 'row' ) {
-    //         var data = pvTable.rows( indexes ).data().pluck( 'id' );
-    //         console.log(pvTable.rows( indexes ));
-    //         var id = pvTable[ type ]( indexes ).nodes().id;
-    //         console.log(id);
-    //         dispatch.recordchange.call(this, d3.select('#' + id).node());
-    //         // do something with the ID of the selected items
-    //     }
-    // } );
+        pvTable.on( 'mouseover', 'tr', function () {
+            var id = this.id;
+            // console.log(id);
+            if ( id ) {
+               dispatch.recordhover(id);
+            }
+        } );
+        // pvTable.on( 'select', function ( e, dt, type, indexes ) {
+        //     // console.log('selection!' + type);
+        //     if ( type === 'row' ) {
+        //         var data = pvTable.rows( indexes ).data().pluck( 'id' );
+        //         console.log(pvTable.rows( indexes ));
+        //         var id = pvTable[ type ]( indexes ).nodes().id;
+        //         console.log(id);
+        //         dispatch.recordchange.call(this, d3.select('#' + id).node());
+        //         // do something with the ID of the selected items
+        //     }
+        // } );
 
-    dispatch.on('recordchange.table', function(id) {
-        // var el = d3.select('#' + id);
-        // var selectedData = el.datum();
-        // console.log(selectedData.id);
+        dispatch.on('recordchange.table', function(id) {
+            // var el = d3.select('#' + id);
+            // var selectedData = el.datum();
+            // console.log(selectedData.id);
 
-        pvTable.row('.selected').deselect();
+            pvTable.row('.selected').deselect();
 
-        pvTable.row('#' + id).select();
-    });
+            pvTable.row('#' + id).select();
+        });
 
-    // pymChild.sendHeight();
+        // pymChild.sendHeight();
 
-    pvTable.on( 'draw', function () {
-        console.log( 'Table redrawn' );
-        pymChild.sendHeight();
-    } );
+        pvTable.on( 'draw', function () {
+            console.log( 'Table redrawn' );
+            pymChild.sendHeight();
+        } );
+
+        tableRendered = true;
+    }
 };
 
 /*
