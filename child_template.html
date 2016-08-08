@@ -8,10 +8,12 @@
     <div class = "introduction">{{ render(COPY.labels.intro)|smarty }}</div>
     {% endif %} -->
     <div class="logos">
-        <h3>Data verified by</h3>
-        <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel-logo.sm.png" /></a>
-        <a href="https://www.ise.fraunhofer.de/en/front-page"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/fraunhofer-logo.sm.png" /></a>
-        <a href="http://www.aist.go.jp/index_en.html"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/aist-logo.sm.png" /></a>
+        <h3 class="logo-header">Data verified by</h3>
+        <div class="logo-container">
+            <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel-logo.sm.png" /></a>
+            <a href="https://www.ise.fraunhofer.de/en/front-page"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/fraunhofer-logo.sm.png" /></a>
+            <a href="http://www.aist.go.jp/index_en.html"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/aist-logo.sm.png" /></a>
+        </div>
     </div>
     {% if COPY.labels['instructions-line'] %}<p>{{ COPY.labels['instructions-line']|smarty }}</p>{% endif %}
 
