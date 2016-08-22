@@ -14,6 +14,9 @@
             <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel.sm.png" /></a>
             <a href="https://www.ise.fraunhofer.de/en/front-page"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/ise.sm.png" /></a>
         </div>
+        <div class="disclaimer">
+            <p>{{ COPY.labels['disclaimer'] }}</p>
+        </div>
     </div>
     {% if COPY.labels['instructions-line'] %}<p>{{ COPY.labels['instructions-line']|smarty }}</p>{% endif %}
 

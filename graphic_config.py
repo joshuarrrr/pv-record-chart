@@ -27,6 +27,10 @@ AIRTABLE_ENDPOINTS = [
     {
         'name': 'references',
         'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/References?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
+    },
+    {
+        'name': 'text',
+        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Text?maxRecords=100&view=Main%20View&api_key={}'.format(AIRTABLE_KEY)
     }
 ]
 
