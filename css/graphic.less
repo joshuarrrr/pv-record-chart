@@ -12,10 +12,24 @@
   }
 }
 
+@black  : #222;
+@gray   : #ddd;
+@gray1  : #ccc;
+@gray2   : #999;
+
+body {
+    color: @black;
+}
+
+.line-instructions {
+    border-top: 1.5px solid @black;
+    font-weight: bold;
+}
+
 .logos {
     width: 50%;
     float: right;
-    border: 1px #ddd solid;
+    border: 1px @gray solid;
     // padding: 10px;
     margin-left: 10px;
     text-align: center;
@@ -24,7 +38,7 @@
 }
 
 .logo-header {
-    background: #ddd;
+    background: @gray;
     padding: .5em 0;
     margin-bottom: 0;
 }
@@ -41,6 +55,29 @@
 
 .key {
     margin: 15px 0 15px 0;
+
+    .key-item label {
+        color: @black;
+    }
+
+    .key-item b {
+        border-radius: 7.5px;
+        -moz-border-radius: 7.5px;
+        -webkit-border-radius: 7.5px;
+    }
+}
+
+.mobile.key {
+    -moz-column-count: 2;
+    -moz-column-gap: 5px;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 5px;
+    column-count: 2;
+    column-gap: 5px;
+
+    .key-item {
+        margin: 5px 0;
+    }    
 }
 
 .introduction p {
@@ -53,14 +90,14 @@
 .lines {
     fill: none;
     stroke-width: 3px;
-    stroke: #ccc;
+    stroke: @gray1;
 }
 
 .value text {
     display: none;
     font-size: 12px;
     font-weight: bold;
-    fill: #999;
+    fill: @gray2;
 }
 
 @media screen and (max-width: 500px) {
@@ -85,12 +122,13 @@
 }
 
 .tooltip-details {
-    border: 1px solid #ddd;
+    border: 2px solid @gray;
     display: none;
+    line-height: 1.1;
     position: absolute;
     z-index: 3;
-    background: white;
-    padding: 10px;
+    background: rgba(255,255,255,.8);
+    padding: 5px;
 
     .meta {
         float: right;
@@ -100,8 +138,20 @@
         text-align: center;
     }
 
+
+    .details>div {
+        margin: .4em 0 0;
+    }
+
+    .big-number {
+        margin: 0;
+    }
+
     .big-number .big {
-        font-size: 3em;
+        // font-size: 3em;
+        font-size: 36px;
+        line-height: 0.8;
+        font-weight: bold;
     }
 
     .big-number .small {
@@ -109,12 +159,16 @@
     }
 
     .group {
-        font-size: 1.2em;
+        font-size: 1em;
         font-weight: bold;
     }
 
     .more-details {
         display: none;
+    }
+
+    a {
+        font-weight: bold;
     }
 
     ul, ol {
@@ -125,16 +179,32 @@
     table {
         width: 100%;
         text-align: center;
-        border-collapse: collapse;
+        // border-collapse: collapse;
         margin: .5em auto;
+        border-spacing: 5px 0;
+        border-collapse: separate;
     }
 
-    table, th, td {
-        border: 1px #ddd solid;
+    th, td {
+        border: 1px @gray2 solid;
     }
 
     th {
-        background: #ddd;
+        background: @gray;
+        border-bottom: none;
+        font-size: 12px;
+        line-height: 1.2em;
+        vertical-align: top;
+
+        .units {
+            display: block;
+            font-size: .7em;
+            font-weight: normal;
+        }
+    }
+
+    td {
+        padding: 5px;
     }
 
     .select-series {
@@ -154,7 +224,7 @@
         display: none;
         margin-top: .5em;
         padding-top: .5em;
-        background: #ddd;
+        background: @gray;
         text-align: center;
 
         .clearfix();
@@ -177,7 +247,7 @@ sup, sub {
   top: -0.4em;
 }
 
-sub { 
+sub {
   top: 0.4em; 
 }
 

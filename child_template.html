@@ -7,20 +7,13 @@
 <!--     {% if COPY.labels.intro %}
     <div class = "introduction">{{ render(COPY.labels.intro)|smarty }}</div>
     {% endif %} -->
-    <div class="logos">
-        <h3 class="logo-header">Data verified by</h3>
-        <div class="logo-container">
-            <a href="http://www.aist.go.jp/index_en.html"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/aist.sm.png" /></a>
-            <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel.sm.png" /></a>
-            <a href="https://www.ise.fraunhofer.de/en/front-page"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/ise.sm.png" /></a>
-        </div>
-        <div class="disclaimer">
-            <p>{{ COPY.labels['disclaimer'] }}</p>
-        </div>
-    </div>
+
+    {% if COPY.labels['description-line'] %}<p>{{ COPY.labels['description-line']|smarty }}</p>{% endif %}
+
+    <div id="key-container"><ul></ul></div>
+    <div class="line-instructions">
     {% if COPY.labels['instructions-line'] %}<p>{{ COPY.labels['instructions-line']|smarty }}</p>{% endif %}
-
-
+    </div>
     <div id="line-chart" class="graphic">
         <img src="fallback.png" alt="[Chart]" class="fallback" />
     </div>
@@ -43,8 +36,20 @@
     <h3>Full Tabular Data</h3>
 
     {% if COPY.labels['instructions-table'] %}<p>{{ render(COPY.labels['instructions-table'])|smarty }}</p>{% endif %}
-    
+
     <table id="pv-table" class="display" width="100%"></table>
+
+    <div class="logos">
+        <h3 class="logo-header">Data verified by</h3>
+        <div class="logo-container">
+            <a href="http://www.aist.go.jp/index_en.html"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/aist.sm.png" /></a>
+            <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel.sm.png" /></a>
+            <a href="https://www.ise.fraunhofer.de/en/front-page"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/ise.sm.png" /></a>
+        </div>
+        <div class="disclaimer">
+            <p>{{ COPY.labels['disclaimer'] }}</p>
+        </div>
+    </div>
 
     <script type="text/javascript" src="js/lib/underscore.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -73,16 +78,16 @@
             </div>
             <div class="group"><%= record.institutions.join(', ') %></div>
             <div><%= record.name %></div>
-            <div><a href="#" id="ttMore-details">See details</a></div>
+            <div><a href="#" id="ttMore-details">Show details</a></div>
         </div>
         <div class="more-details">
             <table>
                 <tbody>
                     <tr>
-                        <th>V<sub>OC</sub> (mV)</th>
-                        <th>J<sub>SC</sub> (mA/cm<sup>2</sup>)</th>
-                        <th>FF (%)</th>
-                        <th>Area (cm<sup>2</sup>)</th>
+                        <th>V<sub>OC</sub> <span class="units">(mV)</span></th>
+                        <th>J<sub>SC</sub> <span class="units">(mA/cm<sup>2</sup>)</span></th>
+                        <th>FF <span class="units">(%)</span></th>
+                        <th>Area <span class="units">(cm<sup>2</sup>)</span></th>
                         <th>Suns</th>
                     </tr>
                     <tr>
@@ -94,7 +99,7 @@
                     </tr>
                 </tbody>
             </table>
-            <em>References:</em>
+            <span>References:</span>
             <ul>
             <% _.each(record.references, function(reference){ %>
                 <li><%= reference %></li>

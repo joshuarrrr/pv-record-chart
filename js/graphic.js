@@ -327,10 +327,10 @@ var renderLineChart = function(config) {
     /*
      * Render the HTML legend.
      */
-    var legend = containerElement.append('ul')
+    var legend = d3.select('#key-container ul')
         .attr('class', 'key')
-        .style('margin-left', margins.left + 'px')
-        .selectAll('g')
+        .classed('mobile', isMobile)
+        .selectAll('li')
         // .data(config['data'])
         .data(colorScale.domain().sort(function(a, b) {
             // console.log(a['name']);
@@ -642,12 +642,16 @@ var renderLineChart = function(config) {
 
         tooltip
             .html(ttTemplate(selectedData))
-            .style('max-width', ttWidth + 'px')
+            .style('max-width', isMobile ? null : ttWidth + 'px')
+            .style('border-color', colorScale(selectedData['category']))
             .style('left', function() {
                 // console.log(xScale(selectedData[dateColumn]));
                 // console.log(chartWidth / 2);
                 // console.log(xScale(selectedData[dateColumn]) < (chartWidth / 2));
-                if ( xScale(selectedData[dateColumn]) < (chartWidth / 2) ) {
+                if ( isMobile ) {
+                    return 0;
+                }
+                else if ( xScale(selectedData[dateColumn]) < (chartWidth / 2) ) {
                     return (window.pageXOffset + matrix.e + ttOffset) + 'px';
                 }
                 else {
