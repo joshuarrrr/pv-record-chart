@@ -798,7 +798,7 @@ var renderTable = function(config) {
                 },
                 {
                     title: 'FF (%)',
-                    data: 'fields.F (%)', defaultContent: '',
+                    data: 'fields.FF (%)', defaultContent: '',
                     responsivePriority: 10
                 },
                 {
