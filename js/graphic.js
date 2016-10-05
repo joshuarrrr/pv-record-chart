@@ -172,7 +172,7 @@ var formatData = function() {
                     'amt': d['fields']['Efficiency (%)'],
                     'voc': d['fields']['Voc (mV)'],
                     'jsc': d['fields']['Jsc (mAcm-2)'],
-                    'ff': d['fields']['F (%)'],
+                    'ff': d['fields']['FF (%)'],
                     'area': d['fields']['area (cm-2)'],
                     'suns': d['fields']['Sun'] || 1,
                     'institutions': d['fields']['Group'].map(function(group) {
