@@ -17,6 +17,7 @@ var tableRendered = false;
 var dispatch = d3.dispatch('recordchange', 'recordhover', 'recordclear');
 
 var dateFormat = d3.time.format('%b %Y');
+var versionFormat = d3.time.format('%Y-%m-%d');
 
 /*
  * Initialize graphic
@@ -821,7 +822,13 @@ var renderTable = function(config) {
                         });
                         return '<ul>' + inner + '</ul>';
                     },
-                    responsivePriority: 11 
+                    responsivePriority: 11
+                },
+                {
+                    title: 'Last Modified',
+                    data: 'date-added',
+                    render: function ( data, type, row ) { return versionFormat(data); },
+                    responsivePriority: 12
                 },
             ]
         });

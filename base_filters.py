@@ -2,6 +2,7 @@
 
 import locale
 import re
+from datetime import date
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 
@@ -132,11 +133,16 @@ def ap_state(usps):
     """
     return USPS_TO_AP_STATE[unicode(usps)]
 
+def today(aDate):
+	return date.today().isoformat()
+	# return "Hello, I'm today"
+
 FILTERS = [
     classify,
     comma,
     ordinal,
     ap_month,
     ap_date,
-    ap_state
+    ap_state,
+    today
 ]
