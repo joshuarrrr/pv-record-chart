@@ -9,9 +9,9 @@
 
 var pymChild = null;
 var isMobile = false;
+// var jsonData = {};
 var dataSeries = [];
-var jsonData = {};
-var unNestedData = [];
+var dataFlat = [];
 var tableRendered = false;
 
 var dispatch = d3.dispatch('recordchange', 'recordhover', 'recordclear');
@@ -29,8 +29,9 @@ var onWindowLoaded = function() {
     function renderPym () {
         // console.log(DATA);
         // console.log(AIRTABLE_DATA);
-        jsonData = AIRTABLE_DATA;
-        DATA = jsonData['records'];
+        // jsonData = AIRTABLE_DATA;
+        // DATA = jsonData['records'];
+        DATA = AIRTABLE_DATA['records'];
 
         if (Modernizr.svg) {
             formatData();
@@ -57,27 +58,32 @@ var formatData = function() {
     //         return _.has(d['fields'], 'References');
     //     });
 
-    DATA.forEach(function(d) {
-        // console.log(d['fields']);
-        if ( d['fields']['Date'] ) {
-            d['fields']['Date'] = d3.time.format('%m/%y').parse(d['fields']['Date']);
-            // d['fields']['DateTime'] = d3.time.format.iso.parse(d['fields']['DateTime']);
-        }
-        else {
-            d['fields']['Date'] = d3.time.format('%m/%y').parse('6/16');
-        }
+    // DATA.forEach(function(d) {
+    //     // console.log(d['fields']);
+    //     if ( d['fields']['Date'] ) {
+    //         d['fields']['Date'] = d3.time.format('%m/%y').parse(d['fields']['Date']);
+    //         // d['fields']['DateTime'] = d3.time.format.iso.parse(d['fields']['DateTime']);
+    //     }
+    //     else {
+    //         d['fields']['Date'] = d3.time.format('%m/%y').parse('6/16');
+    //     }
 
-        if ( !d['fields']['References'] ) {
-            d['fields']['References'] = [];
-        }
+    //     if ( !d['fields']['References'] ) {
+    //         d['fields']['References'] = [];
+    //     }
+
+    //     if ( d['fields']['Date added'] ) {
+    //         d['fields']['Date added'] = d3.time.format.iso.parse(d['fields']['Date added']);
+    //         // d['fields']['DateTime'] = d3.time.format.iso.parse(d['fields']['DateTime']);
+    //     }
         
-        // for (var key in d['fields']) {
-        //     console.log(key);
-        //     if (key != 'Date' && d[key] != null && d[key].length > 0) {
-        //         d[key] = +d[key];
-        //     }
-        // }
-    });
+    //     // for (var key in d['fields']) {
+    //     //     console.log(key);
+    //     //     if (key != 'Date' && d[key] != null && d[key].length > 0) {
+    //     //         d[key] = +d[key];
+    //     //     }
+    //     // }
+    // });
 
     /*
      * Restructure tabular data for easier charting.
@@ -107,38 +113,60 @@ var formatData = function() {
     // }
 
     // console.log(dataSeries);
-    unNestedData = DATA;
+    dataFlat = DATA;
 
-    unNestedData.forEach(function(d) {
-        var cellData = jsonData['cell-types'].find(function(name) {
-                // console.log(name.id);
-                // console.log(d['fields']['Cell type']);
-                return name.id === d['fields']['Cell type'][0];
-            })['fields'];
+    dataFlat.forEach(function(d) {
+        // var cellData = jsonData['cell-types'].find(function(name) {
+        //         // console.log(name.id);
+        //         // console.log(d['fields']['Cell type']);
+        //         return name.id === d['fields']['Cell type'][0];
+        //     })['fields'];
         // console.log(cellData);
-        var cellCategory = jsonData['cell-categories'].find(function(name) {
-                // console.log(name);
-                return name.id === cellData['Category'][0];
-            })['fields']['Name'];
+        //var cellCategory = jsonData['cell-categories'].find(function(name) {
+        //        // console.log(name);
+        //        return name.id === cellData['Category'][0];
+        //    })['fields']['Name'];
+        // console.log(d['fields']);
+        var cellCategory = d['fields']['Cell category'][0];
         // var name = cellCategory + ' - ' + cellData['Cell type'];
 
-        d['name'] = cellData['Cell type'];
+        d['name'] = d['fields']['Cell type lookup'][0];
         // d['name'] = d['fields']['Name'];
         // d['category'] = d['fields']['Cell category'];
         d['category'] = cellCategory;
-        d['date'] = d['fields']['Date'];
+        // d['date'] = d['fields']['Date'];
+        if ( d['fields']['Date'] ) {
+            d['date'] = d3.time.format('%m/%y').parse(d['fields']['Date']);
+            // d['fields']['DateTime'] = d3.time.format.iso.parse(d['fields']['DateTime']);
+        }
+        else {
+            d['fields']['Date'] = d3.time.format('%m/%y').parse('6/16');
+        }
         d['amt'] = d['fields']['Efficiency (%)'];
-        d['institutions'] = d['fields']['Group'].map(function(group) {
-            return jsonData['institutions'].find(function(institution) {
-                    return institution.id === group;
-                })['fields']['Full Name'];
-        });
+        d['voc'] = d['fields']['Voc (mV)'];
+        d['jsc'] = d['fields']['Jsc (mAcm-2)'];
+        d['ff'] = d['fields']['FF (%)'];
+        d['area'] = d['fields']['area (cm-2)'];
+        d['suns'] = d['fields']['Sun'] || 1;
+        // d['institutions'] = d['fields']['Group'].map(function(group) {
+        //     return jsonData['institutions'].find(function(institution) {
+        //             return institution.id === group;
+        //         })['fields']['Full Name'];
+        // });
+        d['institutions'] = d['fields']['Institutions'];
+        d['full-institutions'] = d['fields']['Institutions display'];
 
-        d['references'] = d['fields']['References'].map(function(reference) {
-            return jsonData['references'].find(function(publication) {
-                return publication.id === reference;
-            })['fields']['Reference'];
-        });
+        // d['references'] = d['fields']['References'].map(function(reference) {
+        //     return jsonData['references'].find(function(publication) {
+        //         return publication.id === reference;
+        //     })['fields']['Reference'];
+        // });
+        d['references'] = d['fields']['Full references'] || [];
+        if ( d['fields']['Date added'] ) {
+            d['date-added'] = d3.time.format.iso.parse(d['fields']['Date added']);
+            // d['fields']['DateTime'] = d3.time.format.iso.parse(d['fields']['DateTime']);
+        }
+        // d['date-added'] = d['fields']['Date added'];
     });
 
     DATA = d3.nest()
@@ -223,7 +251,7 @@ var render = function(containerWidth) {
     // Render the datatable!
     renderTable({
         container: '#pv-table',
-        data: unNestedData
+        data: dataFlat
     });
 
     // Update iframe
@@ -784,30 +812,29 @@ var renderTable = function(config) {
                 },
                 {
                     title: 'V<sub>OC</sub> (mV)',
-                    data: 'fields.Voc (mV)', defaultContent: '',
+                    data: 'voc', defaultContent: '',
                     responsivePriority: 7
                 },
                 {
                     title: 'J<sub>SC</sub> (mA/cm<sup>2</sup>)',
-                    data: 'fields.Jsc (mAcm-2)', defaultContent: '',
+                    data: 'jsc', defaultContent: '',
                     responsivePriority: 8
                 },
                 {
                     title: 'Area (cm<sup>2</sup>)',
-                    data: 'fields.area (cm-2)', defaultContent: '',
+                    data: 'area', defaultContent: '',
                     responsivePriority: 9
                 },
                 {
                     title: 'FF (%)',
-                    data: 'fields.FF (%)', defaultContent: '',
+                    data: 'ff', defaultContent: '',
                     responsivePriority: 10
                 },
                 {
                     title: 'Suns',
-                    data: 'fields.Sun', defaultContent: 1,
+                    data: 'suns', defaultContent: 1,
                     responsivePriority: 6
                 },
-
                 {
                     title: 'References',
                     data: 'references',

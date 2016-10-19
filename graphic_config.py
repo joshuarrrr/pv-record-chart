@@ -7,30 +7,37 @@ COPY_GOOGLE_DOC_KEY = '1bVZg-06-DUyZH8B9A4tRoeOIMjfNwUYJm6NXHCyW8K8'
 
 AIRTABLE_KEY = os.environ.get('AIRTABLE_ACCESS_KEY')
 
+# AIRTABLE_ENDPOINTS = [
+#     {
+#         'name': 'records',
+#         'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Efficiency%20Records?maxRecords=1000&view=Main%20View&api_key={}&sortField=DateTime&sortDirection=desc'.format(AIRTABLE_KEY)
+#     },
+#     {
+#         'name': 'cell-types',
+#         'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Cell%20Types?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
+#     },
+#     {
+#         'name': 'institutions',
+#         'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Institutions?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
+#     },
+#     {
+#         'name': 'cell-categories',
+#         'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Cell%20Categories?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
+#     },
+#     {
+#         'name': 'references',
+#         'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/References?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
+#     },
+#     {
+#         'name': 'text',
+#         'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Text?maxRecords=100&view=Main%20View&api_key={}'.format(AIRTABLE_KEY)
+#     }
+# ]
+
 AIRTABLE_ENDPOINTS = [
     {
         'name': 'records',
-        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Efficiency%20Records?maxRecords=1000&view=Main%20View&api_key={}&sortField=DateTime&sortDirection=desc'.format(AIRTABLE_KEY)
-    },
-    {
-        'name': 'cell-types',
-        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Cell%20Types?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
-    },
-    {
-        'name': 'institutions',
-        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Institutions?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
-    },
-    {
-        'name': 'cell-categories',
-        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Cell%20Categories?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
-    },
-    {
-        'name': 'references',
-        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/References?maxRecords=100&view=Main%20View&api_key={}&sortField=_createdTime&sortDirection=desc'.format(AIRTABLE_KEY)
-    },
-    {
-        'name': 'text',
-        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Text?maxRecords=100&view=Main%20View&api_key={}'.format(AIRTABLE_KEY)
+        'url': 'https://api.airtable.com/v0/appdED0QPblKKMq68/Efficiency%20Records?maxRecords=1000&view=Chart&api_key={}&sortField=DateTime&sortDirection=desc'.format(AIRTABLE_KEY)
     }
 ]
 
