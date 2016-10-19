@@ -175,56 +175,62 @@ var formatData = function() {
         })
         .entries(DATA);
 
-    console.log(DATA);
+    // console.log(DATA);
 
     DATA.forEach(function(series) {
         // console.log(series);
-        var cellData = jsonData['cell-types'].find(function(name) {
-                return name.id === series.key;
-            })['fields'];
+        // var cellData = jsonData['cell-types'].find(function(name) {
+        //         return name.id === series.key;
+        //     })['fields'];
         // console.log(cellData);
-        var cellCategory = jsonData['cell-categories'].find(function(name) {
-                // console.log(name);
-                return name.id === cellData['Category'][0];
-            })['fields']['Name'];
-        var name = cellCategory + ' - ' + cellData['Cell type'];
+        // var cellCategory = jsonData['cell-categories'].find(function(name) {
+        //         // console.log(name);
+        //         return name.id === cellData['Category'][0];
+        //     })['fields']['Name'];
+
+        // var name = cellCategory + ' - ' + cellData['Cell type'];
+        // var cellCategory = series.key;
+        // console.log(series);
 
         dataSeries.push({
-            'name': name,
-            'category': cellCategory,
-            'values': series.values.map(function(d) {
-                return {
-                    'id': d.id,
-                    'name': name,
-                    'category': cellCategory,
-                    'date': d['fields']['Date'],
-                    'amt': d['fields']['Efficiency (%)'],
-                    'voc': d['fields']['Voc (mV)'],
-                    'jsc': d['fields']['Jsc (mAcm-2)'],
-                    'ff': d['fields']['FF (%)'],
-                    'area': d['fields']['area (cm-2)'],
-                    'suns': d['fields']['Sun'] || 1,
-                    'institutions': d['fields']['Group'].map(function(group) {
-                        return jsonData['institutions'].find(function(institution) {
-                                return institution.id === group;
-                            })['fields']['Full Name'];
-                    }),
-                    'references': d['fields']['References'].map(function(reference) {
-                        return jsonData['references'].find(function(publication) {
-                            return publication.id === reference;
-                        })['fields']['Reference'];
-                    })
-                    // 'institution': jsonData['institutions'].find(function(institution) {
-                    //     return institution.id === d['fields']['Group'][0];
-                    // })['fields']['Full Name']
-                };
-            }).sort(function(a,b) {
+            'name': series.values[0]['fields']['Cell type lookup'][0],
+            'category': series.values[0]['fields']['Cell category'][0],
+            'values': series.values
+            // 'values': series.values.map(function(d) {
+            //     return {
+            //         'id': d.id,
+            //         'name': d['fields']['Cell category'][0] + ' - ' + d['fields']['Cell type lookup'][0],
+            //         'category': d['fields']['Cell category'][0],
+            //         'date': d['fields']['Date'],
+            //         'amt': d['fields']['Efficiency (%)'],
+            //         'voc': d['fields']['Voc (mV)'],
+            //         'jsc': d['fields']['Jsc (mAcm-2)'],
+            //         'ff': d['fields']['FF (%)'],
+            //         'area': d['fields']['area (cm-2)'],
+            //         'suns': d['fields']['Sun'] || 1,
+            //         'institutions': d['fields']['Group'].map(function(group) {
+            //             return jsonData['institutions'].find(function(institution) {
+            //                     return institution.id === group;
+            //                 })['fields']['Full Name'];
+            //         }),
+            //         'references': d['fields']['References'].map(function(reference) {
+            //             return jsonData['references'].find(function(publication) {
+            //                 return publication.id === reference;
+            //             })['fields']['Reference'];
+            //         }),
+            //         'date-added': d['fields']['Date added']
+            //         // 'institution': jsonData['institutions'].find(function(institution) {
+            //         //     return institution.id === d['fields']['Group'][0];
+            //         // })['fields']['Full Name']
+            //     };
+            // })
+            .sort(function(a,b) {
                 return cmp(a.date,b.date) || cmp(a.amt,b.amt);
             })
         });
     });
 
-    console.log(dataSeries);
+    // console.log(dataSeries);
 };
 
 /*
@@ -623,7 +629,7 @@ var renderLineChart = function(config) {
 
         node.parentNode.appendChild(node);
 
-        console.log(selectedData);
+        // console.log(selectedData);
 
         infoBox.html('');
 
