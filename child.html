@@ -119,6 +119,16 @@
         <div class="more-details">
             <table>
                 <tbody>
+                    <% if (record.suns > 1) { %>
+                    <tr>
+                        <th>Area <span class="units">(cm<sup>2</sup>)</span></th>
+                        <th>Suns</th>
+                    </tr>
+                    <tr>
+                        <td><%= record.area %></td>
+                        <td><%= record.suns %></td>
+                    </tr>
+                    <% } else { %>
                     <tr>
                         <th>V<sub>OC</sub> <span class="units">(mV)</span></th>
                         <th>J<sub>SC</sub> <span class="units">(mA/cm<sup>2</sup>)</span></th>
@@ -133,6 +143,7 @@
                         <td><%= record.area %></td>
                         <td><%= record.suns %></td>
                     </tr>
+                    <% } %>
                 </tbody>
             </table>
             <span>References:</span>
