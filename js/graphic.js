@@ -279,10 +279,10 @@ var renderLineChart = function(config) {
     var valueColumn = 'amt';
 
     var aspectWidth = isMobile ? 4 : 16;
-    var aspectHeight = isMobile ? 3 : 9;
+    var aspectHeight = isMobile ? 3 : 16;
 
     var margins = {
-        top: 5,
+        top: 20,
         // right: 75,
         right: 30,
         bottom: 20,
@@ -416,6 +416,18 @@ var renderLineChart = function(config) {
             }
         });
 
+    var xAxisTop = d3.svg.axis()
+        .scale(xScale)
+        .orient('top')
+        .ticks(ticksX)
+        .tickFormat(function(d, i) {
+            if (isMobile) {
+                return '\u2019' + fmtYearAbbrev(d);
+            } else {
+                return fmtYearFull(d);
+            }
+        });
+
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient('left')
@@ -424,6 +436,10 @@ var renderLineChart = function(config) {
     /*
      * Render axes to chart.
      */
+    chartElement.append('g')
+        .attr('class', 'x axis')
+        .call(xAxisTop);
+
     chartElement.append('g')
         .attr('class', 'x axis')
         .attr('transform', makeTranslate(0, chartHeight))
