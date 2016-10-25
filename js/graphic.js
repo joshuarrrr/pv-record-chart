@@ -134,6 +134,7 @@ var formatData = function() {
         // d['name'] = d['fields']['Name'];
         // d['category'] = d['fields']['Cell category'];
         d['category'] = cellCategory;
+        d['cellId'] = d['fields']['Cell type'][0];
         // d['date'] = d['fields']['Date'];
         if ( d['fields']['Date'] ) {
             d['date'] = d3.time.format('%m/%y').parse(d['fields']['Date']);
@@ -195,6 +196,7 @@ var formatData = function() {
         dataSeries.push({
             'name': series.values[0]['fields']['Cell type lookup'][0],
             'category': series.values[0]['fields']['Cell category'][0],
+            'id': series.values[0]['fields']['Cell type'][0],
             'values': series.values
             // 'values': series.values.map(function(d) {
             //     return {
@@ -478,7 +480,9 @@ var renderLineChart = function(config) {
         .enter()
         .append('path')
             .attr('class', function(d, i) {
-                return 'line ' + classify(d['name']);
+                // console.log(d);
+                // console.log(d['id']);
+                return 'line ' + classify(d['id']);
             })
             .attr('stroke', function(d) {
                 return colorScale(d['category']);
@@ -500,7 +504,7 @@ var renderLineChart = function(config) {
         .enter()
         .append('g')
             .attr('class', function(d, i) {
-                    return 'points ' + classify(d['name']);
+                    return 'points ' + classify(d['id']);
                 });
 
     // var filter = chartElement.append('defs')
@@ -652,16 +656,16 @@ var renderLineChart = function(config) {
 
         el.classed('selected', true);
 
-        d3.selectAll('.line:not(.' + classify(selectedData['name']) + ')')
+        d3.selectAll('.line:not(.' + classify(selectedData['cellId']) + ')')
             .attr('opacity', 0.3);
 
-        d3.selectAll('.' + classify(selectedData['name']))
+        d3.selectAll('.' + classify(selectedData['cellId']))
             .attr('opacity', 1);  
 
-        d3.selectAll('.points:not(.' + classify(selectedData['name']) + ') .point')
+        d3.selectAll('.points:not(.' + classify(selectedData['cellId']) + ') .point')
             .attr('opacity', 0.3);
 
-        d3.selectAll('.points.' + classify(selectedData['name']) + ' .point')
+        d3.selectAll('.points.' + classify(selectedData['cellId']) + ' .point')
             .attr('opacity', 1);  
 
         // d3.select('.div-tooltip').remove();
@@ -701,6 +705,9 @@ var renderLineChart = function(config) {
                     return (window.pageYOffset + matrix.f - this.clientHeight - ttOffset ) + 'px';
                 }
             });
+
+        // tooltip.select('#category')
+        //     .style('color', colorScale(selectedData['category']));
 
         tooltip
             .select('#select-series').selectAll('option')
