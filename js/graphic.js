@@ -629,7 +629,8 @@ var renderLineChart = function(config) {
         var matrix = node.getScreenCTM()
             .translate(+ node.getAttribute('cx') - svgPos.left, + node.getAttribute('cy') - svgPos.top);
         var ttOffset = 9.5;
-        var ttWidth = (chartWidth / 2) - ttOffset;
+        // var ttWidth = (chartWidth / 2) - ttOffset;
+        var ttWidth = 280;
 
         node.parentNode.appendChild(node);
 
@@ -681,7 +682,12 @@ var renderLineChart = function(config) {
 
         tooltip
             .html(ttTemplate(selectedData))
-            .style('max-width', isMobile ? null : ttWidth + 'px')
+            .style('width', function() {
+                if (this.clientWidth > ttWidth ) {
+                    ttWidth = this.clientWidth;
+                }
+                return isMobile ? null : ttWidth + 'px';
+            })
             .style('border-color', colorScale(selectedData['category']))
             .style('left', function() {
                 // console.log(xScale(selectedData[dateColumn]));
@@ -694,7 +700,7 @@ var renderLineChart = function(config) {
                     return (window.pageXOffset + matrix.e + ttOffset) + 'px';
                 }
                 else {
-                    return (window.pageXOffset + matrix.e - this.clientWidth - ttOffset ) + 'px';
+                    return (window.pageXOffset + matrix.e - ttWidth - ttOffset ) + 'px';
                 }
             })
             .style('top', function() {
