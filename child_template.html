@@ -4,9 +4,12 @@
 
     <!-- {% if COPY.labels.headline %}<h1>{{ COPY.labels.headline|smarty }}</h1>{% endif %} -->
     <!-- {% if COPY.labels.subhed %}<h2>{{ render(COPY.labels.subhed)|smarty }}</h2>{% endif %} -->
-<!--     {% if COPY.labels.intro %}
+    {% if COPY.labels.intro %}
     <div class = "introduction">{{ render(COPY.labels.intro)|smarty }}</div>
-    {% endif %} -->
+    {% endif %}
+
+    {% if COPY.labels['chart-title'] %}<h3>{{ COPY.labels['chart-title']|smarty }}{% if COPY.labels.version %}<small> (Version: {{ COPY.labels.version|today }})</small>{% endif %}</h3>{% endif %}
+
 
     {% if COPY.labels['description-line'] %}<p>{{ COPY.labels['description-line']|smarty }}</p>{% endif %}
 
@@ -29,7 +32,6 @@
     <div class="footer">
         {% if COPY.labels.source %}<p>Source: {{ COPY.labels.source|smarty }}</p>{% endif %}
         {% if COPY.labels.credit %}<p>Credit: {{ COPY.labels.credit|smarty }}</p>{% endif %}
-        {% if COPY.labels.version %}<p>Version: {{ COPY.labels.version|today }}</p>{% endif %}
     </div>
     <br>
     <hr>
@@ -39,17 +41,24 @@
     {% if COPY.labels['instructions-table'] %}<p>{{ render(COPY.labels['instructions-table'])|smarty }}</p>{% endif %}
 
     <table id="pv-table" class="display" width="100%"></table>
-
-    <div class="logos">
-        <h3 class="logo-header">Data verified by</h3>
-        <div class="logo-container">
-            <a href="http://www.aist.go.jp/index_en.html"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/aist.sm.png" /></a>
-            <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel.sm.png" /></a>
-            <a href="https://www.ise.fraunhofer.de/en/front-page"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/ise.sm.png" /></a>
+    
+    <div class="after-table">
+        <div class="logos" id="verification">
+            <h3 class="logo-header">Data verified by</h3>
+            <div class="logo-container">
+                <a href="http://www.aist.go.jp/index_en.html"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/aist.sm.png" /></a>
+                <a href="http://www.nrel.gov/"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/nrel.sm.png" /></a>
+                <a href="https://www.ise.fraunhofer.de/en/front-page"><img src="{{ ASSETS_S3_URL }}/{{ slug }}/ise.sm.png" /></a>
+            </div>
+            <div class="disclaimer">
+                <p>{{ COPY.labels['disclaimer'] }}</p>
+            </div>
         </div>
-        <div class="disclaimer">
-            <p>{{ COPY.labels['disclaimer'] }}</p>
-        </div>
+        <h3>Definitions:</h3>
+        <ul>
+            <li id="efficiency-note">{{ COPY.labels['note-efficiency'] }}</li>
+            <li id="sun-note">{{ COPY.labels['note-sun'] }}</li>
+        </ul>
     </div>
 
     <script type="text/javascript" src="js/lib/underscore.js"></script>
