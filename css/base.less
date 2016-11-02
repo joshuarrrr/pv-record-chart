@@ -36,6 +36,9 @@
 @blue5      : #A8D5EF;
 @blue6      : #D3EAF7;
 
+@lightblue  : #5A95D4;
+@black      : #222222;
+
 /*
  * Base styles
  */
@@ -69,16 +72,34 @@ h2 {
 }
 
 h3 {
-    margin: 0 0 15px 0;
-    font-family: 'Theinhardt', Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    text-transform: uppercase;
-    padding-top: 0;
-    line-height: 1.2;
-    letter-spacing: 0.05em;
-    -webkit-font-smoothing: antialiased;
-    font-size: 12px;
-    color: #333;
+    // margin: 0 0 15px 0;
+    // font-family: 'Theinhardt', Helvetica, Arial, sans-serif;
+    // font-weight: normal;
+    // text-transform: uppercase;
+    // padding-top: 0;
+    // line-height: 1.2;
+    // letter-spacing: 0.05em;
+    // -webkit-font-smoothing: antialiased;
+    // font-size: 12px;
+    // color: #333;
+
+    font-size: 22px;
+    font-family: "Theinhardt", sans-serif;
+    font-weight: 500;
+    // color: #d80404;
+    color: @lightblue;
+    line-height: 1em;
+    margin: 4px 0 15px;
+}
+
+h4 {
+    margin: 0;
+    line-height: 1.2em;
+    padding: .5em 0;
+    font-size: 20px;
+    font-family: "Theinhardt", sans-serif;
+    font-weight: 500;
+    color: @black;
 }
 
 .nowrap {
