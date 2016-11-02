@@ -8,7 +8,7 @@
     <div class = "introduction">{{ render(COPY.labels.intro)|smarty }}</div>
     {% endif %}
 
-    {% if COPY.labels['chart-title'] %}<h3>{{ COPY.labels['chart-title']|smarty }}{% if COPY.labels.version %}<small> (Version: {{ COPY.labels.version|today }})</small>{% endif %}</h3>{% endif %}
+    {% if COPY.labels['chart-title'] %}<h3>{{ COPY.labels['chart-title']|smarty }}{% if COPY.labels.version %}<small> (Version: {{ COPY.labels.version|get_today }})</small>{% endif %}</h3>{% endif %}
 
 
     {% if COPY.labels['description-line'] %}<p>{{ COPY.labels['description-line']|smarty }}</p>{% endif %}

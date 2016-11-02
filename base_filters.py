@@ -83,11 +83,13 @@ def classify(text):
 
 	return text
 
+
 def comma(value):
     """
     Format a number with commas.
     """
     return locale.format('%d', float(value), grouping=True)
+
 
 def ordinal(num):
     """
@@ -102,6 +104,7 @@ def ordinal(num):
 
     return unicode(num) + suffix
 
+
 def ap_month(month):
     """
     Convert a month name into AP abbreviated style.
@@ -109,6 +112,7 @@ def ap_month(month):
     i = months.index(month)
 
     return AP_MONTHS[int(month) - 1]
+
 
 def ap_date(value):
     """
@@ -127,15 +131,17 @@ def ap_date(value):
 
     return output
 
+
 def ap_state(usps):
     """
     Convert a USPS state abbreviation into AP style.
     """
     return USPS_TO_AP_STATE[unicode(usps)]
 
-def today(aDate):
-	return date.today().isoformat()
-	# return "Hello, I'm today"
+
+def get_today(aDate):
+    return date.today().isoformat()
+    # return "Hello, I'm today"
 
 FILTERS = [
     classify,
@@ -144,5 +150,5 @@ FILTERS = [
     ap_month,
     ap_date,
     ap_state,
-    today
+    get_today
 ]
