@@ -36,6 +36,7 @@
 @blue5      : #A8D5EF;
 @blue6      : #D3EAF7;
 
+@spectrumblue: #03a6e3;
 @lightblue  : #5A95D4;
 @black      : #222222;
 
@@ -87,7 +88,7 @@ h3 {
     font-family: "Theinhardt", sans-serif;
     font-weight: 500;
     // color: #d80404;
-    color: @lightblue;
+    color: @spectrumblue;
     line-height: 1em;
     margin: 4px 0 15px;
 }
@@ -130,13 +131,14 @@ h4 {
 
 a, a:link, a:visited {
     // color: #4774CC;
-    color: #03a6e3;
-    text-decoration: none;
+    color: @black;
+    text-decoration: underline;
+    // text-decoration: none;
 }
 
 a:hover, a:active {
     // color: #bccae5;
-    text-decoration: underline;
+    color: @spectrumblue;
 }
 
 /*
