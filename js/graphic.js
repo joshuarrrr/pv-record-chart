@@ -280,12 +280,12 @@ var renderLineChart = function(config) {
     var valueColumn = 'amt';
 
     var aspectWidth = isMobile ? 4 : 16;
-    var aspectHeight = isMobile ? 3 : 16;
+    var aspectHeight = isMobile ? 5 : 16;
 
     var margins = {
         top: 20,
         // right: 75,
-        right: 30,
+        right: 160,
         bottom: 20,
         left: 30
     };
@@ -299,6 +299,7 @@ var renderLineChart = function(config) {
         ticksX = 5;
         ticksY = 5;
         margins['right'] = 25;
+        margins['top'] = 55;
     }
 
     // Calculate actual chart dimensions
@@ -509,6 +510,68 @@ var renderLineChart = function(config) {
             });
 
     /*
+     * Render series label area
+     */
+    var seriesLabel = chartElement.append('g')
+        .attr('class', 'series-labels')
+        .selectAll('.series-label')
+        .data(config['data'])
+        .enter()
+        .append('text')
+            // .attr('filter', 'url(#solid)')
+            .attr('text-anchor', 'start')
+            .attr('class', function(d, i) {
+                return 'series-label ' + classify(d['id']);
+            })
+            .attr('dx', 15)
+            .attr('dy', 0)
+            .attr('x', chartWidth)
+            .attr('y', function(d) {
+                return yScale(d3.max(d['values'], function (value) { return value[valueColumn]; })) + 15;
+            })
+            .text(function(d) {
+                return d['name'] + ': ' + d3.max(d['values'], function (value) { return value[valueColumn]; }).toFixed(1) + '%';
+            })
+            .style('opacity', 0);
+
+    if (isMobile) {
+        seriesLabel
+            .attr('dx', 0)
+            .attr('dy', -35)
+            .attr('x', 0)
+            .attr('y', 0)
+            .text(function(d) {
+                return d['name'];
+            });
+    }
+    else {
+        seriesLabel.call(wrapText, (margins['right']) - 25, 16);
+    }
+
+    var bbox = seriesLabel.node().getBBox();
+    var padding = 5;
+    d3.selectAll('.series-label')
+        .each(function(d) {
+            // console.log(this);
+            var bbox = d3.select(this).node().getBBox();
+
+            d3.select(d3.select(this).node().parentNode)
+                .insert('rect', 'text')
+                .attr('class', function() {
+                    return 'sl-background ' + classify(d['id']);
+                })
+                .attr('x', bbox.x - padding)
+                .attr('y', bbox.y - padding)
+                .attr('width', bbox.width + (padding*2))
+                .attr('height', bbox.height + (padding*2))
+                .style('fill', 'white')
+                .style('stroke', '#ddd')
+                .style('width', (bbox.width + (padding*2)) + 'px')
+                .style('height', (bbox.height + (padding*2)) + 'px')
+                .style('opacity', 0);
+        });
+
+    /*
      * Render infobox area
      */
     var infoBox = containerElement.append('div')
@@ -592,11 +655,26 @@ var renderLineChart = function(config) {
         var offset = 15;
         // var dateFormat = d3.time.format('%b %Y');
 
+        d3.selectAll('.series-label, .sl-background')
+            .style('opacity', 0);
+
+        d3.selectAll('.series-label.' + classify(selectedData['cellId']))
+            .style('opacity', 1);
+
+        d3.selectAll('.sl-background.' + classify(selectedData['cellId']))
+            .style('opacity', 1);
+
         d3.selectAll('.tooltip')
             .remove();
 
         d3.selectAll('.point')
             .attr('r', 5);
+
+        d3.selectAll('.line')
+            .style('stroke-width', null)
+
+        d3.select('.line.' + classify(selectedData['cellId']))
+            .style('stroke-width', 5);
 
         el
             .attr('r', 7.5);
@@ -612,7 +690,7 @@ var renderLineChart = function(config) {
                     return xScale(selectedData[dateColumn]) > (chartWidth / 2) ? (- offset) : offset;
                 })
                 .attr('x', xScale(selectedData[dateColumn]))
-                .attr('y', yScale(selectedData[valueColumn]) - offset)
+                .attr('y', yScale(selectedData[valueColumn]) + offset)
                 .text(function() {
                     var label = selectedData[valueColumn].toFixed(1)  + '%';
                     if (!isMobile) {
