@@ -32,7 +32,7 @@ var classify = function(str) {
         .replace(/\-\-+/g, '-')         // Replace multiple - with single -
         .replace(/^-+/, '')             // Trim - from start of text
         .replace(/-+$/, '');            // Trim - from end of text
-}
+};
 
 /*
  * Convert key/value pairs to a style string.
@@ -45,7 +45,7 @@ var formatStyle = function(props) {
     }
 
     return s;
-}
+};
 
 /*
  * Create a SVG tansform for a given translation.
@@ -57,7 +57,7 @@ var makeTranslate = function(x, y) {
     transform.translate[1] = y;
 
     return transform.toString();
-}
+};
 
 /*
  * Parse a url parameter by name.
@@ -68,7 +68,7 @@ var getParameterByName = function(name) {
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
+};
 
 /*
  * Convert a url to a location object.
@@ -77,7 +77,7 @@ var urlToLocation = function(url) {
     var a = document.createElement('a');
     a.href = url;
     return a;
-}
+};
 
 /*
  * Sort by multiple keys
