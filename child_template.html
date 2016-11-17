@@ -42,7 +42,9 @@
 
     {% if COPY.labels['instructions-table'] %}<p>{{ render(COPY.labels['instructions-table'])|smarty }}</p>{% endif %}
 
-    <table id="pv-table" class="display" width="100%"></table>
+    <div id="table-container">
+        <table id="pv-table" class="display" width="100%"></table>
+    </div>
     
     <div class="after-table">
         <div class="logos" id="verification">

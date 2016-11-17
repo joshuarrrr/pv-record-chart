@@ -259,6 +259,7 @@ var render = function(containerWidth) {
     // Render the datatable!
     renderTable({
         container: '#pv-table',
+        width: containerWidth,
         data: dataFlat
     });
 
@@ -798,6 +799,9 @@ var renderTable = function(config) {
     var dateColumn = 'date';
     var valueColumn = 'amt';
     // var dateFormat = d3.time.format('%b %Y');
+
+    d3.select('#table-container')
+        .style('width', config['width'] + 'px');
 
     if ( !tableRendered ) {
         var pvTable = $('#pv-table').DataTable({
