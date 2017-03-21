@@ -360,8 +360,13 @@ var renderLineChart = function(config) {
         .range([chartHeight, 0]);
 
     var colorScale = d3.scale.ordinal()
-        .domain(_.pluck(config['data'], 'category'))
-        .range([COLORS['dark red'], COLORS['dark green'], COLORS['light blue'], COLORS['orange'], COLORS['teal']]);
+        .domain(_.pluck(config['data'], 'category').sort(function(a, b) {
+            // console.log(a['name']);
+            return a.localeCompare(b);
+        }))
+        // .range([COLORS['dark red'], COLORS['dark green'], COLORS['light blue'], COLORS['orange'], COLORS['teal']]);
+        .range([COLORS['orange'], COLORS['dark red'], COLORS['light blue'], COLORS['teal'], COLORS['dark green']]);
+
 
     /*
      * Render the HTML legend.
