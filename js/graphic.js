@@ -881,7 +881,7 @@ var renderTable = function(config) {
      */
     var dateColumn = 'date';
     var valueColumn = 'amt';
-    // var dateFormat = d3.time.format('%b %Y');
+    var dateFormat = d3.time.format('%Y-%m');
 
     d3.select('#table-container')
         .style('width', config['width'] + 'px');
@@ -900,7 +900,7 @@ var renderTable = function(config) {
             ],
             deferRender: true,
             dom: 'Bfrtip',
-            order: [[0, 'desc']],
+            order: [[0, 'desc'],[4, 'desc']],
             responsive: true,
             rowId: 'id',
             select: true,
